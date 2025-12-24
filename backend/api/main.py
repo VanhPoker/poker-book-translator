@@ -49,3 +49,16 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+
+@app.get("/debug/env")
+async def debug_env():
+    """Debug endpoint to check if env vars are loaded (remove in production!)"""
+    import os
+    admin_key = os.getenv("ADMIN_API_KEY", "NOT_SET")
+    return {
+        "admin_key_first_4": admin_key[:4] if len(admin_key) >= 4 else admin_key,
+        "admin_key_length": len(admin_key),
+        "storage_provider": os.getenv("STORAGE_PROVIDER", "NOT_SET"),
+        "supabase_url_set": bool(os.getenv("SUPABASE_URL")),
+    }

@@ -146,7 +146,7 @@ async def run_translation_job(
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         
         # Step 1: Extract PDF to Markdown
-        md_content, image_count = extract_pdf_to_markdown(input_path, output_dir)
+        md_content = extract_pdf_to_markdown(input_path, output_dir)
         
         # Step 2: Translate Markdown
         translated_content = translate_markdown(md_content, output_dir=output_dir)

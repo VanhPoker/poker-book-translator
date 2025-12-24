@@ -1,0 +1,25 @@
+# Book Translation API - Requirements
+
+# FastAPI
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Translation (existing)
+pymupdf4llm>=0.0.5
+pypandoc>=1.12
+google-generativeai>=0.3.0
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+
+# Google Cloud Storage (optional)
+google-cloud-storage>=2.13.0
+
+# Azure Blob Storage (optional)
+azure-storage-blob>=12.19.0
+
+# Supabase
+supabase>=2.0.0
+
+# Utilities
+pydantic>=2.5.0

@@ -1,0 +1,18 @@
+**Prompt cho Agent:**
+> "Tôi muốn triển khai **Module Dịch thuật** dựa trên file thiết kế `@module_translation_plan.txt`.
+>
+> Trước hết, hãy tạo môi trường Python và cài đặt các thư viện cần thiết (`pymupdf4llm`, `openai`, `pypandoc`, `weasyprint`).
+>
+> Sau đó, hãy viết script `extractor.py` trước để tôi test thử việc tách text và ảnh từ một file PDF mẫu. Hãy đảm bảo ảnh được lưu vào đúng thư mục."
+
+### Một số lưu ý chuyên môn (Tips cho bạn):
+
+1.  **Tại sao dùng `pymupdf4llm`?**
+    Đây là thư viện mới của team PyMuPDF, nó cực kỳ mạnh ở chỗ nó chuyển PDF thành Markdown chuẩn, tự động nhận diện đâu là tiêu đề, đâu là bảng (table), và quan trọng nhất là nó **tự trích xuất ảnh** và chèn link ảnh vào đúng chỗ trong text.
+    * *Kết quả:* Bạn không cần lo lắng về việc ảnh bị trôi hay mất khi dịch.
+
+2.  **Vấn đề thuật ngữ Poker:**
+    Tôi đã thêm phần `TERMINOLOGY` vào file plan. Đây là điểm chết người của Google Translate. Google sẽ dịch "Fold" thành "Gấp lại", "Hand" thành "Bàn tay". Với prompt trên, Agent sẽ setup AI để giữ nguyên các từ chuyên môn (Fold, All-in, Bluff) - điều này cực quan trọng với người đọc Poker.
+
+3.  **PDF Output:**
+    Để PDF đầu ra đẹp như sách thật, bước chuyển từ `Markdown -> HTML -> PDF` (dùng WeasyPrint) cho phép bạn chèn thêm CSS. Ví dụ: Bạn có thể chỉnh font chữ to hơn, canh lề rộng hơn cho dễ đọc. Agent sẽ làm được việc này dễ dàng.

@@ -1,0 +1,24 @@
+# Ignore
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+*.egg-info/
+dist/
+build/
+
+# Temp files
+temp_jobs/
+translator/output/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

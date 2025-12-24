@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Output directories
+output/
+temp/
+*.pdf
+*.epub
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/

@@ -1,0 +1,93 @@
+# MODULE SPEC: AI BOOK TRANSLATION PIPELINE (POKER DOMAIN)
+
+## 1. OBJECTIVE
+Build a Python-based pipeline that takes an English Poker PDF, translates it to Vietnamese, and outputs both PDF and EPUB formats while preserving original images and structural layout (headers, bold, lists).
+
+## 2. INPUT & OUTPUT
+- **Input:** `source.pdf` (English).
+- **Output:** - `result.epub` (Reflowable text, images included).
+  - `result.pdf` (Clean layout, Vietnamese text, images included).
+
+## 3. TECH STACK & LIBRARIES
+- **Language:** Python 3.10+
+- **PDF Extraction:** `pymupdf4llm` (This is crucial. It converts PDF to Markdown and extracts images automatically).
+- **Translation:** OpenAI API (GPT-4o-mini) or Gemini Flash API (Cost-effective for long books).
+- **Document Builder:** `pandoc` (Must be installed on OS) and `pypandoc` (Python wrapper).
+- **HTML to PDF:** `weasyprint` (Better than Pandoc's default latex engine for preserving images in PDF).
+
+## 4. DETAILED WORKFLOW IMPLEMENTATION
+
+### STEP 1: EXTRACTION (PDF -> MARKDOWN)
+**Task:** Use `pymupdf4llm` to convert the PDF into a Markdown text file.
+- **Requirement:** Extract images to a local folder named `/images`.
+- **Logic:**
+  ```python
+  import pymupdf4llm
+  md_text = pymupdf4llm.to_markdown("source.pdf", write_images=True, image_path="output/images")
+  # This produces markdown with syntax like: ![image](output/images/img1.png)
+ ### STEP 2: CHUNKING & TRANSLATION
+Task: Split the Markdown content and send to LLM.
+
+Challenge: Context window limits.
+
+Strategy: Split by Headers (#, ##) or generic character count (approx 2000 words/chunk).
+
+System Prompt for LLM:
+
+"You are a professional Poker player and translator. Translate the following Markdown content from English to Vietnamese. RULES:
+
+Keep all Markdown syntax strictly unchanged (especially ![]() image links, **bold**, headers).
+
+TERMINOLOGY:
+
+'Hand' -> 'Hand bài' (not 'bàn tay').
+
+'Fold' -> 'Fold' or 'Bỏ bài' (not 'Gấp').
+
+'Bet' -> 'Bet' or 'Cược'.
+
+'Range' -> 'Range' or 'Khoảng bài'.
+
+'Bluff' -> 'Bluff'.
+
+Do not translate code blocks or URLs."
+
+STEP 3: RECONSTRUCTION (MARKDOWN -> EPUB/PDF)
+Task: Convert the translated Markdown string into final files.
+
+Tool: Use pypandoc.
+
+To EPUB:
+
+Python
+
+pypandoc.convert_text(vietnamese_md, 'epub', format='md', outputfile='book.epub', extra_args=['--resource-path=output/'])
+To PDF: First convert MD to HTML, add some CSS for styling, then use weasyprint to render PDF. Why WeasyPrint? It handles image positioning in PDF better than direct Pandoc conversion.
+
+5. DIRECTORY STRUCTURE FOR THIS MODULE
+/backend/translator ├── input/ # Place source.pdf here ├── output/ │ ├── images/ # Extracted images │ ├── temp_md/ # Intermediate markdown files │ ├── final/ # Resulting PDF/EPUB ├── main.py # Entry point ├── extractor.py # Handle pymupdf4llm logic ├── ai_translator.py # Handle LLM API calls └── builder.py # Handle Pandoc/Weasyprint conversion
+
+### Hướng dẫn cách dùng file này để Agent bắt đầu làm việc
+
+Sau khi lưu file trên, bạn mở Chat với Agent và gõ lệnh sau. Tôi đã viết sẵn prompt để Agent hiểu ngay vấn đề "thuật ngữ Poker":
+
+**Prompt cho Agent:**
+> "Tôi muốn triển khai **Module Dịch thuật** dựa trên file thiết kế `@module_translation_plan.txt`.
+>
+> Trước hết, hãy tạo môi trường Python và cài đặt các thư viện cần thiết (`pymupdf4llm`, `openai`, `pypandoc`, `weasyprint`).
+>
+> Sau đó, hãy viết script `extractor.py` trước để tôi test thử việc tách text và ảnh từ một file PDF mẫu. Hãy đảm bảo ảnh được lưu vào đúng thư mục."
+
+### Một số lưu ý chuyên môn (Tips cho bạn):
+
+1.  **Tại sao dùng `pymupdf4llm`?**
+    Đây là thư viện mới của team PyMuPDF, nó cực kỳ mạnh ở chỗ nó chuyển PDF thành Markdown chuẩn, tự động nhận diện đâu là tiêu đề, đâu là bảng (table), và quan trọng nhất là nó **tự trích xuất ảnh** và chèn link ảnh vào đúng chỗ trong text.
+    * *Kết quả:* Bạn không cần lo lắng về việc ảnh bị trôi hay mất khi dịch.
+
+2.  **Vấn đề thuật ngữ Poker:**
+    Tôi đã thêm phần `TERMINOLOGY` vào file plan. Đây là điểm chết người của Google Translate. Google sẽ dịch "Fold" thành "Gấp lại", "Hand" thành "Bàn tay". Với prompt trên, Agent sẽ setup AI để giữ nguyên các từ chuyên môn (Fold, All-in, Bluff) - điều này cực quan trọng với người đọc Poker.
+
+3.  **PDF Output:**
+    Để PDF đầu ra đẹp như sách thật, bước chuyển từ `Markdown -> HTML -> PDF` (dùng WeasyPrint) cho phép bạn chèn thêm CSS. Ví dụ: Bạn có thể chỉnh font chữ to hơn, canh lề rộng hơn cho dễ đọc. Agent sẽ làm được việc này dễ dàng.
+
+Bạn có file PDF mẫu nào về Poker chưa? Nếu chưa, hãy bảo Agent tạo một file PDF giả lập đơn giản để test luồng chạy trước nhé.

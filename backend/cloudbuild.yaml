@@ -1,0 +1,41 @@
+# Cloud Build config for auto-deploy to Cloud Run
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/book-translator-api', '.']
+  
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/book-translator-api']
+  
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'book-translator-api'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/book-translator-api'
+      - '--region'
+      - 'asia-southeast1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '2Gi'
+      - '--timeout'
+      - '3600'
+      - '--set-env-vars'
+      - 'GEMINI_API_KEY=${_GEMINI_API_KEY},ADMIN_API_KEY=${_ADMIN_API_KEY},GCS_BUCKET=${_GCS_BUCKET},SUPABASE_URL=${_SUPABASE_URL},SUPABASE_KEY=${_SUPABASE_KEY}'
+
+images:
+  - 'gcr.io/$PROJECT_ID/book-translator-api'
+
+# Substitution variables (set in Cloud Build trigger)
+substitutions:
+  _GEMINI_API_KEY: ''
+  _ADMIN_API_KEY: ''
+  _GCS_BUCKET: ''
+  _SUPABASE_URL: ''
+  _SUPABASE_KEY: ''

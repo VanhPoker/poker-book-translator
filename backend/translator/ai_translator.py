@@ -233,7 +233,7 @@ def translate_markdown(md_text: str, provider: str = None, output_dir: str = "ou
     
     # Auto post-processing to remove any duplicate English content
     try:
-        from post_processor import remove_duplicate_english
+        from post_processor import remove_duplicate_english, clean_table_of_contents
         print(f"\n🧹 Running post-processor to clean duplicates...")
         cleaned = remove_duplicate_english(full_translation)
         if len(cleaned) < len(full_translation):
@@ -242,6 +242,14 @@ def translate_markdown(md_text: str, provider: str = None, output_dir: str = "ou
             print(f"   ✅ Cleaned and saved")
         else:
             print(f"   ✅ No duplicates found")
+        
+        # Clean Table of Contents formatting
+        print(f"🧹 Cleaning Table of Contents formatting...")
+        cleaned = clean_table_of_contents(full_translation)
+        if cleaned != full_translation:
+            full_translation = cleaned
+            translated_file.write_text(full_translation, encoding="utf-8")
+            print(f"   ✅ ToC cleaned")
     except ImportError:
         pass  # post_processor not available, skip
     

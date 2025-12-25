@@ -1,16 +1,30 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { Libre_Baskerville } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const geist = Geist({
   subsets: ["latin"],
   variable: "--font-geist",
 });
 
+const libreBaskerville = Libre_Baskerville({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+});
+
 export const metadata: Metadata = {
-  title: "Poker Book Translator",
-  description: "Đọc sách Poker đã được dịch sang tiếng Việt",
+  title: "Thư Viện Poker - Sách dịch tiếng Việt",
+  description: "Đọc sách Poker kinh điển đã được dịch sang tiếng Việt bằng AI",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -21,12 +35,16 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body
-        className={`${geist.variable} antialiased bg-slate-950 text-white min-h-screen`}
+        className={`${geist.variable} ${libreBaskerville.variable} antialiased min-h-screen`}
       >
-        <Header />
-        <main className="pt-20">
-          {children}
-        </main>
+        <AuthProvider>
+          <ThemeProvider>
+            <Header />
+            <main className="pt-20">
+              {children}
+            </main>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

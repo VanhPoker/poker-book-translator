@@ -1,20 +1,109 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617;
-  --foreground: #f1f5f9;
+  --background: #0c0a09;
+  --foreground: #fef3c7;
+}
+
+/* Dark Mode (default) */
+.dark-mode {
+  --bg-primary: #0c0a09;
+  --bg-secondary: #1c1917;
+  --bg-card: rgba(120, 53, 15, 0.2);
+  --text-primary: #fef3c7;
+  --text-secondary: #d97706;
+  --text-muted: rgba(217, 119, 6, 0.6);
+  --border-color: rgba(146, 64, 14, 0.3);
+  --accent: #d97706;
+}
+
+/* Light Mode */
+.light-mode {
+  --bg-primary: #fef7ed;
+  --bg-secondary: #fff7ed;
+  --bg-card: rgba(254, 243, 199, 0.8);
+  --text-primary: #451a03;
+  --text-secondary: #92400e;
+  --text-muted: rgba(146, 64, 14, 0.7);
+  --border-color: rgba(217, 119, 6, 0.3);
+  --accent: #b45309;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist);
+  --font-serif: 'Libre Baskerville', Georgia, serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg-primary, var(--background));
+  color: var(--text-primary, var(--foreground));
   font-family: var(--font-sans), system-ui, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.font-serif {
+  font-family: 'Libre Baskerville', Georgia, serif;
+}
+
+/* Theme-aware backgrounds */
+.dark-mode .bg-stone-950 {
+  background-color: #0c0a09 !important;
+}
+
+.light-mode .bg-stone-950 {
+  background-color: #fef7ed !important;
+}
+
+.dark-mode .bg-amber-950\/30 {
+  background-color: rgba(69, 26, 3, 0.3) !important;
+}
+
+.light-mode .bg-amber-950\/30 {
+  background-color: rgba(254, 243, 199, 0.8) !important;
+}
+
+/* Theme-aware text */
+.dark-mode .text-amber-100 {
+  color: #fef3c7 !important;
+}
+
+.light-mode .text-amber-100 {
+  color: #451a03 !important;
+}
+
+.dark-mode .text-amber-50 {
+  color: #fffbeb !important;
+}
+
+.light-mode .text-amber-50 {
+  color: #78350f !important;
+}
+
+.dark-mode .text-amber-300 {
+  color: #fcd34d !important;
+}
+
+.light-mode .text-amber-300 {
+  color: #92400e !important;
+}
+
+.dark-mode .text-amber-400 {
+  color: #fbbf24 !important;
+}
+
+.light-mode .text-amber-400 {
+  color: #b45309 !important;
+}
+
+/* Theme-aware borders */
+.dark-mode .border-amber-900\/30 {
+  border-color: rgba(120, 53, 15, 0.3) !important;
+}
+
+.light-mode .border-amber-900\/30 {
+  border-color: rgba(217, 119, 6, 0.3) !important;
 }
 
 /* Custom Scrollbar */
@@ -23,33 +112,49 @@ body {
   height: 8px;
 }
 
-::-webkit-scrollbar-track {
-  background: #1e293b;
+.dark-mode ::-webkit-scrollbar-track {
+  background: #1c1917;
+}
+
+.light-mode ::-webkit-scrollbar-track {
+  background: #fef3c7;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: #78350f;
+}
+
+.light-mode ::-webkit-scrollbar-thumb {
+  background: #d97706;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #475569;
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+/* Prose styling for book content - Dark */
+.dark-mode .prose {
+  --tw-prose-body: #fef3c7;
+  --tw-prose-headings: #fffbeb;
+  --tw-prose-links: #fbbf24;
+  --tw-prose-bold: #fffbeb;
+  --tw-prose-quotes: #fcd34d;
 }
 
-/* Prose styling for book content */
-.prose {
-  --tw-prose-body: #cbd5e1;
-  --tw-prose-headings: #e2e8f0;
-  --tw-prose-links: #a78bfa;
-  --tw-prose-bold: #f1f5f9;
-  --tw-prose-quotes: #94a3b8;
+/* Prose styling for book content - Light */
+.light-mode .prose {
+  --tw-prose-body: #451a03;
+  --tw-prose-headings: #78350f;
+  --tw-prose-links: #b45309;
+  --tw-prose-bold: #78350f;
+  --tw-prose-quotes: #92400e;
 }
 
 /* Line clamp utility */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-

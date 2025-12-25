@@ -1,59 +1,166 @@
+'use client'
+
+import { useTheme } from "@/contexts/ThemeContext";
 import BookCard from "@/components/BookCard";
-import { getBooks } from "@/lib/supabase";
+import { getBooks, Book } from "@/lib/supabase";
+import { useEffect, useState } from "react";
 
-export const revalidate = 60; // Revalidate every 60 seconds
+// Category definitions
+const CATEGORIES = [
+  { id: 'all', name: 'Tất cả', icon: '📚' },
+  { id: 'nlh', name: 'NLH', icon: '♠️' },
+  { id: 'omaha', name: 'Omaha', icon: '♥️' },
+  { id: 'shortdeck', name: 'Short Deck', icon: '♦️' },
+  { id: 'ai_research', name: 'AI/GTO', icon: '🤖' },
+  { id: 'psychology', name: 'Tâm lí', icon: '🧠' },
+  { id: 'general', name: 'Tổng hợp', icon: '♣️' },
+];
 
-export default async function HomePage() {
-  const books = await getBooks();
+export default function HomePage() {
+  const { theme } = useTheme();
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+
+  useEffect(() => {
+    async function loadBooks() {
+      const data = await getBooks();
+      setBooks(data);
+      setLoading(false);
+    }
+    loadBooks();
+  }, []);
+
+  // Filter books by category
+  const filteredBooks = selectedCategory === 'all'
+    ? books
+    : books.filter(book => book.category === selectedCategory);
+
+  if (loading) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-stone-950' : 'bg-amber-50'}`}>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-amber-500 border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20"></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl"></div>
+    <div className={`min-h-screen transition-colors duration-300 ${theme === 'dark' ? 'bg-stone-950' : 'bg-amber-50'}`}>
+      {/* Hero Section - Library Style */}
+      <section className={`relative py-16 overflow-hidden border-b transition-colors duration-300
+                          ${theme === 'dark' ? 'border-amber-900/30' : 'border-amber-300/50'}`}>
+        {/* Background texture */}
+        <div className={`absolute inset-0 ${theme === 'dark'
+          ? 'bg-gradient-to-br from-amber-950/30 via-stone-950 to-stone-900'
+          : 'bg-gradient-to-br from-amber-100 via-amber-50 to-white'}`}></div>
 
         <div className="relative max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-              Sách Poker Tiếng Việt
-            </span>
+          {/* Library Logo */}
+          <div className={`inline-flex items-center justify-center w-24 h-24 rounded-full border-4 shadow-2xl mb-6 overflow-hidden
+                         ${theme === 'dark'
+              ? 'bg-white border-amber-600/50 shadow-amber-900/50'
+              : 'bg-white border-amber-400/50 shadow-amber-300/50'}`}>
+            <img src="/logo.png" alt="Thư Viện Poker" className="w-20 h-20 object-contain" />
+          </div>
+
+          <h1 className={`font-serif text-4xl md:text-5xl font-bold mb-4
+                         ${theme === 'dark' ? 'text-amber-100' : 'text-amber-900'}`}>
+            Thư Viện Poker
           </h1>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Dịch tự động từ các cuốn sách Poker kinh điển bằng AI.
-            Đọc online hoặc tải về EPUB.
-          </p>
+          <p className={`text-xl max-w-2xl mx-auto font-serif italic
+                        ${theme === 'dark' ? 'text-amber-300/70' : 'text-amber-700/80'}`}>
+            Tàng kinh các poker cho cộng đồng          </p>
+
+          {/* Decorative line */}
+          <div className="flex items-center justify-center gap-4 mt-8">
+            <div className={`h-px w-16 ${theme === 'dark' ? 'bg-gradient-to-r from-transparent to-amber-600' : 'bg-gradient-to-r from-transparent to-amber-400'}`}></div>
+            <span className={theme === 'dark' ? 'text-amber-500' : 'text-amber-600'}>♠ ♥ ♦ ♣</span>
+            <div className={`h-px w-16 ${theme === 'dark' ? 'bg-gradient-to-l from-transparent to-amber-600' : 'bg-gradient-to-l from-transparent to-amber-400'}`}></div>
+          </div>
         </div>
       </section>
 
-      {/* Book List */}
-      <section className="max-w-7xl mx-auto px-6 pb-20">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-white">Thư viện sách</h2>
-          <span className="text-slate-400">{books.length} cuốn</span>
+      {/* Category Filter Tabs */}
+      <section className="max-w-7xl mx-auto px-6 py-6">
+        <div className="flex flex-wrap gap-2 justify-center">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
+                        ${selectedCategory === cat.id
+                  ? (theme === 'dark'
+                    ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/30'
+                    : 'bg-amber-500 text-white shadow-lg shadow-amber-500/30')
+                  : (theme === 'dark'
+                    ? 'bg-stone-800 text-amber-300 hover:bg-stone-700'
+                    : 'bg-amber-100 text-amber-700 hover:bg-amber-200')}`}
+            >
+              <span className="mr-1">{cat.icon}</span>
+              {cat.name}
+              {cat.id !== 'all' && (
+                <span className="ml-1 opacity-60">
+                  ({books.filter(b => b.category === cat.id).length})
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Book Shelf Section */}
+      <section className="max-w-7xl mx-auto px-6 py-6">
+        {/* Section Header */}
+        <div className={`flex items-center justify-between mb-8 pb-4 border-b
+                        ${theme === 'dark' ? 'border-amber-900/30' : 'border-amber-300/50'}`}>
+          <div className="flex items-center gap-3">
+
+            <h2 className={` text-2xl font-bold ${theme === 'dark' ? 'text-amber-100' : 'text-amber-900'}`}>
+              {selectedCategory === 'all' ? 'Kệ Sách' : CATEGORIES.find(c => c.id === selectedCategory)?.name}
+            </h2>
+          </div>
+          <span className={` ${theme === 'dark' ? 'text-amber-400/60' : 'text-amber-600/70'}`}>
+            {filteredBooks.length} quyển
+          </span>
         </div>
 
-        {books.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="text-6xl mb-4">📚</div>
-            <p className="text-slate-400 text-lg">Chưa có sách nào được dịch.</p>
-            <p className="text-slate-500 mt-2">Hãy upload PDF để bắt đầu!</p>
+        {filteredBooks.length === 0 ? (
+          <div className={`text-center py-20 rounded-xl border
+                          ${theme === 'dark'
+              ? 'bg-amber-950/20 border-amber-900/20'
+              : 'bg-amber-100/50 border-amber-300/30'}`}>
+            <img src="/logo.png" alt="" className="w-24 h-24 mx-auto mb-4 opacity-50" />
+            <p className={`text-xl font-serif ${theme === 'dark' ? 'text-amber-300/70' : 'text-amber-700'}`}>
+              {selectedCategory === 'all' ? 'Thư viện còn trống' : 'Chưa có sách trong danh mục này'}
+            </p>
+            <p className={`mt-2 ${theme === 'dark' ? 'text-amber-400/50' : 'text-amber-600/70'}`}>
+              Upload PDF để bắt đầu dịch sách
+            </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {books.map((book) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {filteredBooks.map((book) => (
               <BookCard
                 key={book.id}
                 id={book.id}
                 title={book.title}
                 status={book.status}
+                coverUrl={book.cover_url}
                 createdAt={book.created_at}
+                category={book.category}
               />
             ))}
           </div>
         )}
       </section>
+
+      {/* Footer */}
+      <footer className={`border-t py-8 mt-12 ${theme === 'dark' ? 'border-amber-900/30' : 'border-amber-300/50'}`}>
+        <div className={`max-w-7xl mx-auto px-6 text-center font-serif text-sm
+                        ${theme === 'dark' ? 'text-amber-400/40' : 'text-amber-600/60'}`}>
+
+        </div>
+      </footer>
     </div>
   );
 }

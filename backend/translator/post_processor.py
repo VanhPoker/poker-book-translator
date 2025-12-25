@@ -53,6 +53,43 @@ def remove_duplicate_english(md_text: str) -> str:
     return md_text
 
 
+def clean_table_of_contents(md_text: str) -> str:
+    """
+    Clean up Table of Contents (ToC) formatting from PDF extraction.
+    - Removes excessive dot leaders (...........)
+    - Fixes page number formatting
+    - Cleans up broken lines
+    """
+    lines = md_text.split('\n')
+    cleaned_lines = []
+    
+    for line in lines:
+        # Pattern: text followed by dots and page number
+        # Example: "Chương Một: Poker Cơ Bản .......................... 1"
+        
+        # Replace 3+ consecutive dots with proper formatting
+        # Keep format: "Title ... PageNum"
+        cleaned_line = re.sub(r'\.{4,}', ' ... ', line)
+        
+        # Remove excessive dots followed by numbers (ToC pattern)
+        # Pattern: "text.....9 More text.....12"
+        cleaned_line = re.sub(r'\.{2,}(\d+)\s*', r' (\1) ', cleaned_line)
+        
+        # Clean up multiple spaces
+        cleaned_line = re.sub(r'\s{3,}', '  ', cleaned_line)
+        
+        # If line is mostly dots (more than 50%), skip it
+        if len(line) > 0:
+            dot_ratio = line.count('.') / len(line)
+            if dot_ratio > 0.5:
+                continue
+        
+        cleaned_lines.append(cleaned_line)
+    
+    return '\n'.join(cleaned_lines)
+
+
+
 def clean_translated_markdown(input_path: str, output_path: str = None) -> str:
     """
     Clean translated markdown by removing duplicate English content.

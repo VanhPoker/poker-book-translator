@@ -154,6 +154,71 @@ ul, ol {
 strong {
     color: #1a1a2e;
 }
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: 11pt;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+}
+
+th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 10pt;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e94560;
+}
+
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+}
+
+tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+tr:hover {
+    background: #f0f4f8;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Responsive table */
+@media screen and (max-width: 600px) {
+    table {
+        font-size: 10pt;
+    }
+    th, td {
+        padding: 8px 10px;
+    }
+}
+
+/* Caption styling */
+caption {
+    padding: 10px;
+    font-weight: bold;
+    font-size: 12pt;
+    color: #1a1a2e;
+    text-align: left;
+    caption-side: top;
+}
 </style>
 """
 

@@ -43,7 +43,8 @@ class DatabaseService:
         title: str,
         source_format: str = "pdf",
         target_language: str = "vi",
-        file_size_bytes: int = 0
+        file_size_bytes: int = 0,
+        category: str = "general"
     ) -> dict:
         """Create a new book record"""
         book = {
@@ -53,6 +54,7 @@ class DatabaseService:
             "source_format": source_format,
             "target_language": target_language,
             "file_size_bytes": file_size_bytes,
+            "category": category,
             "created_at": datetime.now().isoformat()
         }
         
@@ -107,7 +109,8 @@ class DatabaseService:
         id: str,
         html_url: Optional[str] = None,
         epub_url: Optional[str] = None,
-        pdf_url: Optional[str] = None
+        pdf_url: Optional[str] = None,
+        cover_url: Optional[str] = None
     ) -> dict:
         """Save output URLs for a book"""
         update_data = {}
@@ -117,6 +120,8 @@ class DatabaseService:
             update_data["epub_url"] = epub_url
         if pdf_url:
             update_data["pdf_url"] = pdf_url
+        if cover_url:
+            update_data["cover_url"] = cover_url
         
         if self.supabase:
             try:
@@ -165,13 +170,61 @@ class DatabaseService:
         else:
             return self.in_memory_store.get(id)
     
-    def list_books(self, limit: int = 50) -> List[dict]:
-        """List all books"""
+    def list_books(self, limit: int = 50, include_deleted: bool = False) -> List[dict]:
+        """List all books, optionally including deleted ones"""
         if self.supabase:
-            result = self.supabase.table("translated_books").select("*").order("created_at", desc=True).limit(limit).execute()
+            query = self.supabase.table("translated_books").select("*")
+            if not include_deleted:
+                query = query.eq("is_deleted", False)
+            result = query.order("created_at", desc=True).limit(limit).execute()
             return result.data or []
         else:
-            return list(self.in_memory_store.values())
+            books = list(self.in_memory_store.values())
+            if not include_deleted:
+                books = [b for b in books if not b.get("is_deleted", False)]
+            return books
+    
+    def soft_delete_book(self, id: str) -> dict:
+        """Soft delete a book by setting is_deleted = true"""
+        if self.supabase:
+            try:
+                print(f"🗑️ Soft deleting book: {id}")
+                result = self.supabase.table("translated_books").update({
+                    "is_deleted": True,
+                    "deleted_at": datetime.now().isoformat()
+                }).eq("id", id).execute()
+                print(f"✅ Book soft deleted: {result.data}")
+                return result.data[0] if result.data else {}
+            except Exception as e:
+                print(f"❌ Failed to soft delete book: {e}")
+                return {"error": str(e)}
+        else:
+            if id in self.in_memory_store:
+                self.in_memory_store[id]["is_deleted"] = True
+                self.in_memory_store[id]["deleted_at"] = datetime.now().isoformat()
+                return self.in_memory_store[id]
+            return {}
+    
+    def restore_book(self, id: str) -> dict:
+        """Restore a soft-deleted book"""
+        if self.supabase:
+            try:
+                print(f"♻️ Restoring book: {id}")
+                result = self.supabase.table("translated_books").update({
+                    "is_deleted": False,
+                    "deleted_at": None
+                }).eq("id", id).execute()
+                print(f"✅ Book restored: {result.data}")
+                return result.data[0] if result.data else {}
+            except Exception as e:
+                print(f"❌ Failed to restore book: {e}")
+                return {"error": str(e)}
+        else:
+            if id in self.in_memory_store:
+                self.in_memory_store[id]["is_deleted"] = False
+                self.in_memory_store[id]["deleted_at"] = None
+                return self.in_memory_store[id]
+            return {}
 
 
 # Singleton instance

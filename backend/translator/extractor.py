@@ -44,6 +44,43 @@ def extract_pdf_to_markdown(pdf_path: str, output_dir: str = "output") -> str:
     return md_text
 
 
+def extract_cover_image(pdf_path: str, output_path: str) -> str:
+    """
+    Extract the first page of PDF as cover image.
+    
+    Args:
+        pdf_path: Path to source PDF file
+        output_path: Path to save cover image (e.g., "cover.png")
+        
+    Returns:
+        Path to the saved cover image
+    """
+    import fitz  # PyMuPDF
+    
+    try:
+        doc = fitz.open(pdf_path)
+        if len(doc) == 0:
+            print("⚠️ PDF has no pages")
+            return None
+        
+        # Get first page
+        page = doc[0]
+        
+        # Render page to image with good quality (2x zoom for clarity)
+        mat = fitz.Matrix(2, 2)  # 2x zoom
+        pix = page.get_pixmap(matrix=mat)
+        
+        # Save as PNG
+        pix.save(output_path)
+        doc.close()
+        
+        print(f"📕 Cover extracted: {output_path}")
+        return output_path
+    except Exception as e:
+        print(f"⚠️ Could not extract cover: {e}")
+        return None
+
+
 if __name__ == "__main__":
     # Test extraction with input/source.pdf
     import sys

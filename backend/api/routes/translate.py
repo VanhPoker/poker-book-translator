@@ -283,7 +283,7 @@ async def run_translation_job(
         # Import translator modules
         from translator.extractor import extract_pdf_to_markdown, extract_cover_image
         from translator.ai_translator import translate_markdown
-        from translator.builder import build_epub, build_html
+        from translator.builder import build_epub, build_html, build_pdf
         
         # Create output directory
         Path(output_dir).mkdir(parents=True, exist_ok=True)
@@ -305,9 +305,18 @@ async def run_translation_job(
         
         epub_path = str(final_dir / "result.epub")
         html_path = str(final_dir / "result.html")
+        translated_pdf_path = str(final_dir / "translated.pdf")
         
         build_epub(str(translated_md_path), epub_path, output_dir + "/")
         build_html(str(translated_md_path), html_path, output_dir + "/")
+        
+        # Step 3.5: Build Vietnamese PDF (optional - requires LaTeX)
+        try:
+            build_pdf(str(translated_md_path), translated_pdf_path, output_dir + "/")
+            print(f"📄 Vietnamese PDF created: {translated_pdf_path}")
+        except Exception as pdf_err:
+            print(f"⚠️ PDF generation skipped: {pdf_err}")
+            translated_pdf_path = None
         
         # Step 4: Upload cover and images first
         gcs_prefix = f"books/{job_id}/"
@@ -362,12 +371,19 @@ async def run_translation_job(
         
         print(f"🖼️ Fixed image paths in HTML with base: {supabase_images_base}")
         
-        # Step 5: Upload HTML and EPUB
+        # Step 5: Upload HTML, EPUB and translated PDF
         html_url = storage.upload_file(html_path, f"{gcs_prefix}result.html")
         epub_url = storage.upload_file(epub_path, f"{gcs_prefix}result.epub")
         
-        # Step 6: Save to database
-        db.save_book_urls(job_id, html_url=html_url, epub_url=epub_url, cover_url=cover_url, pdf_url=pdf_url)
+        # Upload translated PDF if generated successfully
+        translated_pdf_url = None
+        if translated_pdf_path and Path(translated_pdf_path).exists():
+            translated_pdf_url = storage.upload_file(translated_pdf_path, f"{gcs_prefix}translated.pdf")
+            print(f"📄 Translated PDF uploaded: {translated_pdf_url}")
+        
+        # Step 6: Save to database (use translated_pdf_url if available, fallback to source pdf_url)
+        final_pdf_url = translated_pdf_url if translated_pdf_url else pdf_url
+        db.save_book_urls(job_id, html_url=html_url, epub_url=epub_url, cover_url=cover_url, pdf_url=final_pdf_url)
         db.update_book_status(job_id, "completed")
         
         # Update local store

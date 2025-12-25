@@ -57,8 +57,17 @@ class DatabaseService:
         }
         
         if self.supabase:
-            result = self.supabase.table("translated_books").insert(book).execute()
-            return result.data[0] if result.data else book
+            try:
+                print(f"📝 Creating book record: {id}")
+                result = self.supabase.table("translated_books").insert(book).execute()
+                print(f"✅ Book created successfully: {result.data}")
+                return result.data[0] if result.data else book
+            except Exception as e:
+                print(f"❌ Failed to create book in Supabase: {e}")
+                print(f"   Book data: {book}")
+                # Fall back to in-memory
+                self.in_memory_store[id] = book
+                return book
         else:
             self.in_memory_store[id] = book
             return book
@@ -79,8 +88,14 @@ class DatabaseService:
             update_data["completed_at"] = datetime.now().isoformat()
         
         if self.supabase:
-            result = self.supabase.table("translated_books").update(update_data).eq("id", id).execute()
-            return result.data[0] if result.data else {}
+            try:
+                print(f"📝 Updating book status: {id} -> {status}")
+                result = self.supabase.table("translated_books").update(update_data).eq("id", id).execute()
+                print(f"✅ Status updated: {result.data}")
+                return result.data[0] if result.data else {}
+            except Exception as e:
+                print(f"❌ Failed to update status in Supabase: {e}")
+                return {}
         else:
             if id in self.in_memory_store:
                 self.in_memory_store[id].update(update_data)
@@ -104,8 +119,15 @@ class DatabaseService:
             update_data["pdf_url"] = pdf_url
         
         if self.supabase:
-            result = self.supabase.table("translated_books").update(update_data).eq("id", id).execute()
-            return result.data[0] if result.data else {}
+            try:
+                print(f"📝 Saving URLs for book: {id}")
+                print(f"   URLs: {update_data}")
+                result = self.supabase.table("translated_books").update(update_data).eq("id", id).execute()
+                print(f"✅ URLs saved: {result.data}")
+                return result.data[0] if result.data else {}
+            except Exception as e:
+                print(f"❌ Failed to save URLs in Supabase: {e}")
+                return {}
         else:
             if id in self.in_memory_store:
                 self.in_memory_store[id].update(update_data)

@@ -15,6 +15,7 @@ from api.models.schemas import (
     TokenUsage
 )
 from api.auth import require_admin
+from services.database_service import get_database_service
 
 router = APIRouter()
 
@@ -51,7 +52,17 @@ async def translate_book(
         content = await file.read()
         f.write(content)
     
-    # Store job info
+    # Create book record in database FIRST
+    db = get_database_service()
+    db.create_book(
+        id=job_id,
+        title=title,
+        source_format="pdf",
+        target_language=target_language,
+        file_size_bytes=len(content)
+    )
+    
+    # Store job info in memory (for quick access)
     jobs_store[job_id] = {
         "id": job_id,
         "title": title,

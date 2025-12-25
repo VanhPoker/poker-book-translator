@@ -23,12 +23,24 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadBooks() {
-      const data = await getBooks();
-      setBooks(data);
-      setLoading(false);
+      try {
+        // Timeout after 10 seconds
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Request timeout')), 10000)
+        );
+
+        const data = await Promise.race([getBooks(), timeoutPromise]);
+        setBooks(data);
+      } catch (err) {
+        console.error('Error loading books:', err);
+        setError('Không thể tải sách. Vui lòng thử lại sau.');
+      } finally {
+        setLoading(false);
+      }
     }
     loadBooks();
   }, []);
@@ -49,6 +61,25 @@ export default function HomePage() {
     return (
       <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-stone-950' : 'bg-amber-50'}`}>
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-amber-500 border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-stone-950' : 'bg-amber-50'}`}>
+        <div className="text-center">
+          <div className="text-6xl mb-4">⚠️</div>
+          <p className={`text-xl mb-4 ${theme === 'dark' ? 'text-amber-300' : 'text-amber-700'}`}>
+            {error}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-500"
+          >
+            Thử lại
+          </button>
+        </div>
       </div>
     );
   }

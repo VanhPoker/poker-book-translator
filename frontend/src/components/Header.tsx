@@ -35,14 +35,14 @@ export default function Header() {
 
                     {/* Navigation */}
                     <nav className="flex items-center gap-4">
-                        <Link
+                        {/* <Link
                             href="/"
                             className={`transition-colors font-serif flex items-center gap-2
                                       ${theme === 'dark' ? 'text-amber-300/80 hover:text-amber-100' : 'text-amber-700 hover:text-amber-900'}`}
                         >
                             <span>📚</span>
                             Kệ sách
-                        </Link>
+                        </Link> */}
 
                         {/* Theme Toggle Button */}
                         <button

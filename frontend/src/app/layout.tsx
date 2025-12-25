@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   title: "Thư Viện Poker - Sách dịch tiếng Việt",
   description: "Đọc sách Poker kinh điển đã được dịch sang tiếng Việt bằng AI",
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: "/logo.png?v=2",
+    apple: "/logo.png?v=2",
   },
 };
 

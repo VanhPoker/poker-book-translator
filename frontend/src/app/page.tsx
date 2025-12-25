@@ -2,8 +2,9 @@
 
 import { useTheme } from "@/contexts/ThemeContext";
 import BookCard from "@/components/BookCard";
+import SearchBar from "@/components/SearchBar";
 import { getBooks, Book } from "@/lib/supabase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 // Category definitions
 const CATEGORIES = [
@@ -21,6 +22,7 @@ export default function HomePage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     async function loadBooks() {
@@ -31,10 +33,17 @@ export default function HomePage() {
     loadBooks();
   }, []);
 
-  // Filter books by category
-  const filteredBooks = selectedCategory === 'all'
-    ? books
-    : books.filter(book => book.category === selectedCategory);
+  // Handle search with useCallback to avoid re-renders
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query.toLowerCase());
+  }, []);
+
+  // Filter books by category AND search query
+  const filteredBooks = books.filter(book => {
+    const matchesCategory = selectedCategory === 'all' || book.category === selectedCategory;
+    const matchesSearch = !searchQuery || book.title.toLowerCase().includes(searchQuery);
+    return matchesCategory && matchesSearch;
+  });
 
   if (loading) {
     return (
@@ -76,6 +85,11 @@ export default function HomePage() {
             <div className={`h-px w-16 ${theme === 'dark' ? 'bg-gradient-to-r from-transparent to-amber-600' : 'bg-gradient-to-r from-transparent to-amber-400'}`}></div>
             <span className={theme === 'dark' ? 'text-amber-500' : 'text-amber-600'}>♠ ♥ ♦ ♣</span>
             <div className={`h-px w-16 ${theme === 'dark' ? 'bg-gradient-to-l from-transparent to-amber-600' : 'bg-gradient-to-l from-transparent to-amber-400'}`}></div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="mt-8">
+            <SearchBar onSearch={handleSearch} placeholder="Tìm kiếm sách poker..." />
           </div>
         </div>
       </section>
@@ -148,6 +162,7 @@ export default function HomePage() {
                 coverUrl={book.cover_url}
                 createdAt={book.created_at}
                 category={book.category}
+                viewCount={book.view_count}
               />
             ))}
           </div>

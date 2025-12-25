@@ -1,8 +1,11 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { getBook, Book } from "@/lib/supabase";
+import { getBook, Book, incrementViewCount } from "@/lib/supabase";
 import BookReader from "@/components/BookReader";
+import ShareButtons from "@/components/ShareButtons";
+import RatingStars from "@/components/RatingStars";
+import FavoriteButton from "@/components/FavoriteButton";
 import Link from "next/link";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useParams } from "next/navigation";
@@ -19,6 +22,11 @@ export default function BookDetailPage() {
             const data = await getBook(id);
             setBook(data);
             setLoading(false);
+
+            // Increment view count when page loads
+            if (data) {
+                incrementViewCount(id);
+            }
         }
         if (id) loadBook();
     }, [id]);
@@ -105,15 +113,31 @@ export default function BookDetailPage() {
                                 {book.title}
                             </h1>
 
-                            <div className={`flex flex-wrap gap-4 text-sm mb-6
+                            <div className={`flex flex-wrap gap-4 text-sm mb-4
                                           ${theme === 'dark' ? 'text-amber-200' : 'text-amber-700'}`}>
                                 <span>📅 {formattedDate}</span>
                                 <span>💾 {fileSizeMB} MB</span>
                                 <span>🌐 {book.target_language?.toUpperCase()}</span>
+                                {book.view_count && book.view_count > 0 && (
+                                    <span>👁️ {book.view_count} lượt xem</span>
+                                )}
                             </div>
 
+                            {/* Rating Display */}
+                            {(book.rating_avg !== undefined && book.rating_count !== undefined && book.rating_count > 0) && (
+                                <div className="mb-4">
+                                    <RatingStars
+                                        rating={book.rating_avg}
+                                        readonly
+                                        size="md"
+                                        showCount={book.rating_count}
+                                    />
+                                </div>
+                            )}
+
                             {/* Action Buttons */}
-                            <div className="flex flex-wrap gap-4">
+                            <div className="flex flex-wrap gap-4 mb-4">
+                                <FavoriteButton bookId={id} />
                                 {book.epub_url && (
                                     <a
                                         href={book.epub_url}
@@ -140,6 +164,9 @@ export default function BookDetailPage() {
                                     </a>
                                 )}
                             </div>
+
+                            {/* Share Buttons */}
+                            <ShareButtons title={book.title} />
                         </div>
                     </div>
                 </div>

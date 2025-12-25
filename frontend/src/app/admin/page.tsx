@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { supabase, Book, deleteBook } from "@/lib/supabase";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 // Category definitions
@@ -18,7 +19,7 @@ const CATEGORIES = [
 
 export default function AdminPage() {
     const { theme } = useTheme();
-    const { user, loading: authLoading, signIn, signOut } = useAuth();
+    const { user, isAdmin, loading: authLoading, signIn, signOut } = useAuth();
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
     const [showDeleted, setShowDeleted] = useState(false);
@@ -26,6 +27,7 @@ export default function AdminPage() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loginLoading, setLoginLoading] = useState(false);
+    const router = useRouter(); // Initialize useRouter
 
     // Cover edit state
     const [editingBook, setEditingBook] = useState<Book | null>(null);
@@ -62,18 +64,27 @@ export default function AdminPage() {
             }
             setLoading(false);
         }
-        if (user) {
+
+        if (user && isAdmin) {
             loadBooks();
+        } else if (user && !isAdmin) {
+            // If user is logged in but not an admin, redirect to home or sign out
+            signOut(); // Sign out the non-admin user
+            router.push('/'); // Redirect to home page
         }
-    }, [user, showDeleted]);
+    }, [showDeleted, user, isAdmin, router, signOut]);
 
     const handleDelete = async (id: string, title: string) => {
-        if (confirm(`Bạn có chắc muốn xóa "${title}"?`)) {
-            const success = await deleteBook(id);
-            if (success) {
+        if (!confirm(`Xóa sách "${title}"?`)) return;
+
+        const success = await deleteBook(id);
+        if (success) {
+            if (showDeleted) {
                 setBooks(books.map(b =>
                     b.id === id ? { ...b, is_deleted: true } : b
                 ));
+            } else {
+                setBooks(books.filter(b => b.id !== id));
             }
         }
     };
@@ -104,43 +115,37 @@ export default function AdminPage() {
         }
     };
 
-    const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!editingBook || !e.target.files || e.target.files.length === 0) return;
+    const handleCoverUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files || !event.target.files[0] || !editingBook) return;
 
-        const file = e.target.files[0];
+        const file = event.target.files[0];
         const fileExt = file.name.split('.').pop();
         const fileName = `${editingBook.id}/cover.${fileExt}`;
 
         setUploading(true);
-
         try {
             // Upload to Supabase Storage
             const { error: uploadError } = await supabase.storage
-                .from('book-files')
-                .upload(`books/${fileName}`, file, { upsert: true });
+                .from('book-assets')
+                .upload(fileName, file, { upsert: true });
 
             if (uploadError) throw uploadError;
 
             // Get public URL
             const { data: urlData } = supabase.storage
-                .from('book-files')
-                .getPublicUrl(`books/${fileName}`);
+                .from('book-assets')
+                .getPublicUrl(fileName);
 
-            const newCoverUrl = urlData.publicUrl;
-
-            // Update database
-            const { error: dbError } = await supabase
+            // Update book record
+            await supabase
                 .from('translated_books')
-                .update({ cover_url: newCoverUrl })
+                .update({ cover_url: urlData.publicUrl })
                 .eq('id', editingBook.id);
-
-            if (dbError) throw dbError;
 
             // Update local state
             setBooks(books.map(b =>
-                b.id === editingBook.id ? { ...b, cover_url: newCoverUrl } : b
+                b.id === editingBook.id ? { ...b, cover_url: urlData.publicUrl } : b
             ));
-
             setEditingBook(null);
             alert('Cập nhật ảnh bìa thành công!');
         } catch (err) {
@@ -160,7 +165,7 @@ export default function AdminPage() {
         );
     }
 
-    // Login form
+    // Not logged in - show login form
     if (!user) {
         return (
             <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-stone-950' : 'bg-amber-50'}`}>
@@ -174,7 +179,7 @@ export default function AdminPage() {
                             Admin Panel
                         </h1>
                         <p className={`text-sm mt-1 ${isDark ? 'text-amber-400/60' : 'text-amber-600/70'}`}>
-                            Đăng nhập bằng Supabase Auth
+                            Chỉ dành cho Admin
                         </p>
                     </div>
 

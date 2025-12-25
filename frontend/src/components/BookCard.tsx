@@ -20,9 +20,10 @@ interface BookCardProps {
     coverUrl?: string | null
     createdAt?: string | null
     category?: string | null
+    viewCount?: number
 }
 
-export default function BookCard({ id, title, status, coverUrl, createdAt, category }: BookCardProps) {
+export default function BookCard({ id, title, status, coverUrl, createdAt, category, viewCount }: BookCardProps) {
     const { theme } = useTheme()
 
     const statusConfig = {
@@ -107,9 +108,16 @@ export default function BookCard({ id, title, status, coverUrl, createdAt, categ
                         {title}
                     </h3>
 
-                    <div className={`flex items-center text-sm ${theme === 'dark' ? 'text-amber-400/60' : 'text-amber-600/80'}`}>
-                        <span className="mr-1">📅</span>
-                        {formattedDate}
+                    <div className={`flex items-center justify-between text-sm ${theme === 'dark' ? 'text-amber-400/60' : 'text-amber-600/80'}`}>
+                        <span>
+                            <span className="mr-1">📅</span>
+                            {formattedDate}
+                        </span>
+                        {(viewCount !== undefined && viewCount > 0) && (
+                            <span>
+                                👁️ {viewCount}
+                            </span>
+                        )}
                     </div>
                 </div>
 

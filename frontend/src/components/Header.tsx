@@ -2,9 +2,11 @@
 
 import Link from 'next/link'
 import { useTheme } from '@/contexts/ThemeContext'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function Header() {
     const { theme, toggleTheme } = useTheme()
+    const { user, profile, isAdmin, signOut } = useAuth()
 
     return (
         <header className={`fixed top-0 left-0 right-0 z-50 border-b shadow-lg transition-all duration-300
@@ -34,15 +36,45 @@ export default function Header() {
                     </Link>
 
                     {/* Navigation */}
-                    <nav className="flex items-center gap-4">
-                        {/* <Link
-                            href="/"
-                            className={`transition-colors font-serif flex items-center gap-2
-                                      ${theme === 'dark' ? 'text-amber-300/80 hover:text-amber-100' : 'text-amber-700 hover:text-amber-900'}`}
-                        >
-                            <span>📚</span>
-                            Kệ sách
-                        </Link> */}
+                    <nav className="flex items-center gap-3">
+                        {/* User Auth */}
+                        {user ? (
+                            <div className="flex items-center gap-3">
+                                <span className={`text-sm hidden sm:block ${theme === 'dark' ? 'text-amber-300' : 'text-amber-700'}`}>
+                                    👤 {profile?.display_name || profile?.username || user.email?.split('@')[0]}
+                                </span>
+                                {isAdmin && (
+                                    <Link
+                                        href="/admin"
+                                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+                                                   ${theme === 'dark'
+                                                ? 'bg-amber-800/50 text-amber-100 hover:bg-amber-700/50'
+                                                : 'bg-amber-200 text-amber-800 hover:bg-amber-300'}`}
+                                    >
+                                        ⚙️ Admin
+                                    </Link>
+                                )}
+                                <button
+                                    onClick={() => signOut()}
+                                    className={`px-3 py-1.5 rounded-lg text-sm transition-colors
+                                               ${theme === 'dark'
+                                            ? 'text-amber-400 hover:text-amber-200'
+                                            : 'text-amber-600 hover:text-amber-800'}`}
+                                >
+                                    Đăng xuất
+                                </button>
+                            </div>
+                        ) : (
+                            <Link
+                                href="/login"
+                                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300
+                                           ${theme === 'dark'
+                                        ? 'bg-amber-700 hover:bg-amber-600 text-white'
+                                        : 'bg-amber-500 hover:bg-amber-600 text-white'}`}
+                            >
+                                Đăng nhập
+                            </Link>
+                        )}
 
                         {/* Theme Toggle Button */}
                         <button

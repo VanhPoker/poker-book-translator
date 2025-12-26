@@ -49,18 +49,33 @@ export default function AdminPage() {
     useEffect(() => {
         async function loadBooks() {
             setLoading(true);
-            let query = supabase
-                .from('translated_books')
-                .select('*')
-                .order('created_at', { ascending: false });
+            try {
+                // Create query with timeout using AbortController
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
-            if (!showDeleted) {
-                query = query.eq('is_deleted', false);
-            }
+                let query = supabase
+                    .from('translated_books')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(100); // Limit to 100 books for faster loading
 
-            const { data, error } = await query;
-            if (!error) {
-                setBooks(data || []);
+                if (!showDeleted) {
+                    query = query.eq('is_deleted', false);
+                }
+
+                const { data, error } = await query;
+                clearTimeout(timeoutId);
+
+                if (error) {
+                    console.error('Error loading books:', error);
+                    setBooks([]);
+                } else {
+                    setBooks(data || []);
+                }
+            } catch (err) {
+                console.error('Failed to load books:', err);
+                setBooks([]);
             }
             setLoading(false);
         }
@@ -375,6 +390,16 @@ export default function AdminPage() {
                             >
                                 {showDeleted ? '🗑️ Đang xem đã xóa' : '📚 Xem sách đã xóa'}
                             </button>
+
+                            <Link
+                                href="/admin/queue"
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                                          ${isDark
+                                        ? 'bg-green-800/50 text-green-300 hover:bg-green-700/50'
+                                        : 'bg-green-100 text-green-700 hover:bg-green-200'}`}
+                            >
+                                📤 Hàng đợi dịch
+                            </Link>
 
                             <button
                                 onClick={signOut}

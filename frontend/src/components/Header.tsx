@@ -37,6 +37,17 @@ export default function Header() {
 
                     {/* Navigation */}
                     <nav className="flex items-center gap-3">
+                        {/* Request Translation Link */}
+                        <Link
+                            href="/request"
+                            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hidden sm:block
+                                       ${theme === 'dark'
+                                    ? 'bg-green-800/50 text-green-300 hover:bg-green-700/50'
+                                    : 'bg-green-100 text-green-700 hover:bg-green-200'}`}
+                        >
+                            📚 Yêu cầu dịch
+                        </Link>
+
                         {/* User Auth */}
                         {user ? (
                             <div className="flex items-center gap-3">

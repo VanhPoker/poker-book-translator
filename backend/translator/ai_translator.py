@@ -147,11 +147,16 @@ def translate_with_gemini(text: str, max_retries: int = 3) -> tuple[str, dict]:
                 wait_time = (2 ** attempt) * 30  # 30s, 60s, 120s
                 print(f"\n⏳ Rate limited. Waiting {wait_time}s before retry {attempt + 1}/{max_retries}...")
                 time.sleep(wait_time)
+            # Check if it's a timeout/deadline error (504)
+            elif "504" in error_str or "deadline" in error_str.lower() or "timeout" in error_str.lower():
+                wait_time = (2 ** attempt) * 10  # 10s, 20s, 40s
+                print(f"\n⏳ Deadline exceeded (504). Waiting {wait_time}s before retry {attempt + 1}/{max_retries}...")
+                time.sleep(wait_time)
             else:
                 raise e
     
     # If all retries failed, raise the last error
-    raise Exception(f"Failed after {max_retries} retries due to rate limiting")
+    raise Exception(f"Failed after {max_retries} retries")
 
 
 def translate_markdown(md_text: str, provider: str = None, output_dir: str = "output") -> str:

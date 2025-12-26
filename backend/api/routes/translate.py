@@ -105,58 +105,114 @@ Return ONLY the category name (shortdeck, omaha, nlh, ai_research, psychology, o
 @router.post("/translate", response_model=TranslateResponse)
 async def translate_book(
     background_tasks: BackgroundTasks,
-    file: UploadFile = File(..., description="PDF file to translate"),
-    title: str = Form(default=None, description="Book title (optional, auto-extracted from filename)"),
+    file: Optional[UploadFile] = File(default=None, description="PDF file to translate"),
+    pdf_url: Optional[str] = Form(default=None, description="URL to PDF file (alternative to file upload)"),
+    title: Optional[str] = Form(default=None, description="Book title (optional, auto-extracted)"),
     target_language: str = Form(default="vi", description="Target language"),
+    category: Optional[str] = Form(default=None, description="Book category (optional, auto-classified)"),
+    pending_book_id: Optional[str] = Form(default=None, description="ID of pending book (for queue integration)"),
     _admin = Depends(require_admin)
 ):
     """
-    Upload a PDF and start translation process.
-    Returns immediately with job ID for polling.
-    Title is auto-generated from filename if not provided.
+    Translate a PDF to target language.
+    
+    Accepts either:
+    - file: Upload a PDF file directly
+    - pdf_url: URL to a PDF file (e.g., arXiv, Supabase storage)
+    
+    Optionally link to a pending_book_id for queue integration.
     """
-    # Validate file type
-    if not file.filename.lower().endswith('.pdf'):
-        raise HTTPException(status_code=400, detail="Only PDF files are supported")
+    import requests
+    
+    # Validate: must have either file or pdf_url
+    if not file and not pdf_url:
+        raise HTTPException(status_code=400, detail="Either 'file' or 'pdf_url' must be provided")
+    
+    if file and pdf_url:
+        raise HTTPException(status_code=400, detail="Provide either 'file' or 'pdf_url', not both")
     
     # Generate job ID
     job_id = str(uuid.uuid4())
     
-    # Auto-extract title from filename if not provided
-    if not title:
-        # Remove .pdf extension and clean up filename
-        title = file.filename.rsplit('.', 1)[0]
-        # Replace underscores and dashes with spaces
-        title = title.replace('_', ' ').replace('-', ' ')
-        # Clean up multiple spaces
-        title = ' '.join(title.split())
+    # Create temp directory for this job
+    job_dir = Path(f"temp_jobs/{job_id}")
+    job_dir.mkdir(parents=True, exist_ok=True)
+    input_path = job_dir / "source.pdf"
+    
+    # Get PDF content - either from upload or URL
+    if file:
+        # File upload
+        if not file.filename.lower().endswith('.pdf'):
+            raise HTTPException(status_code=400, detail="Only PDF files are supported")
+        
+        content = await file.read()
+        with open(input_path, "wb") as f:
+            f.write(content)
+        
+        # Extract title from filename if not provided
+        if not title:
+            title = file.filename.rsplit('.', 1)[0]
+            title = title.replace('_', ' ').replace('-', ' ')
+            title = ' '.join(title.split())
+        
+        print(f"📤 Received file upload: {file.filename} ({len(content)} bytes)")
+        
+    else:
+        # Download from URL
+        print(f"📥 Downloading PDF from: {pdf_url}")
+        try:
+            response = requests.get(pdf_url, timeout=120)
+            response.raise_for_status()
+            content = response.content
+            
+            with open(input_path, "wb") as f:
+                f.write(content)
+            
+            print(f"   ✅ Downloaded {len(content)} bytes")
+            
+            # Extract title from URL if not provided
+            if not title:
+                title = pdf_url.split('/')[-1].replace('.pdf', '').replace('_', ' ')
+            
+        except Exception as e:
+            print(f"❌ Failed to download PDF: {e}")
+            # If linked to pending book, mark as failed
+            if pending_book_id:
+                try:
+                    db = get_database_service()
+                    db.supabase.table("pending_books").update({"status": "failed"}).eq("id", pending_book_id).execute()
+                except:
+                    pass
+            raise HTTPException(status_code=500, detail=f"Failed to download PDF: {e}")
+    
+    file_size = len(content)
     
     # Translate title to Vietnamese using Gemini
     bilingual_title = translate_title(title, target_language)
     
-    # Auto-classify book category using Gemini
-    category = auto_classify_book(title)
+    # Auto-classify book category if not provided
+    if not category:
+        category = auto_classify_book(title)
     
-    # Create temp directory for this job
-    job_dir = Path(f"temp_jobs/{job_id}")
-    job_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Save uploaded file
-    input_path = job_dir / "source.pdf"
-    with open(input_path, "wb") as f:
-        content = await file.read()
-        f.write(content)
-    
-    # Create book record in database FIRST
+    # Create book record in database
     db = get_database_service()
-    db.create_book(
-        id=job_id,
-        title=bilingual_title,
-        source_format="pdf",
-        target_language=target_language,
-        file_size_bytes=len(content),
-        category=category
-    )
+    book_data = {
+        "id": job_id,
+        "title": bilingual_title,
+        "source_format": "pdf",
+        "target_language": target_language,
+        "file_size_bytes": file_size,
+        "category": category
+    }
+    
+    # Link to pending book if provided
+    if pending_book_id:
+        book_data["pending_book_id"] = pending_book_id
+        # Update pending book status to translating
+        db.supabase.table("pending_books").update({"status": "translating"}).eq("id", pending_book_id).execute()
+        print(f"🔗 Linked to pending book: {pending_book_id}")
+    
+    db.create_book(**book_data)
     
     # Store job info in memory (for quick access)
     jobs_store[job_id] = {
@@ -164,9 +220,10 @@ async def translate_book(
         "title": bilingual_title,
         "status": BookStatus.PENDING,
         "target_language": target_language,
-        "file_size_bytes": len(content),
+        "file_size_bytes": file_size,
         "input_path": str(input_path),
         "output_dir": str(job_dir / "output"),
+        "pending_book_id": pending_book_id,
     }
     
     # Start background translation
@@ -175,7 +232,8 @@ async def translate_book(
         job_id=job_id,
         input_path=str(input_path),
         output_dir=str(job_dir / "output"),
-        target_language=target_language
+        target_language=target_language,
+        pending_book_id=pending_book_id  # Pass pending_book_id for status update
     )
     
     return TranslateResponse(
@@ -263,7 +321,8 @@ async def run_translation_job(
     job_id: str, 
     input_path: str, 
     output_dir: str, 
-    target_language: str
+    target_language: str,
+    pending_book_id: Optional[str] = None
 ):
     """Background task to run the translation pipeline"""
     import sys
@@ -398,9 +457,25 @@ async def run_translation_job(
             )
         })
         
+        # Update pending book status if linked
+        if pending_book_id:
+            db.supabase.table("pending_books").update({"status": "completed"}).eq("id", pending_book_id).execute()
+            print(f"✅ Pending book {pending_book_id} marked as completed")
+        
+        print(f"✅ Translation complete for job {job_id}")
+        
     except Exception as e:
+        print(f"❌ Translation failed for job {job_id}: {e}")
+        import traceback
+        traceback.print_exc()
+        
         jobs_store[job_id].update({
             "status": BookStatus.FAILED,
             "error_message": str(e)
         })
         db.update_book_status(job_id, "failed", error_message=str(e))
+        
+        # Update pending book status if linked
+        if pending_book_id:
+            db.supabase.table("pending_books").update({"status": "failed"}).eq("id", pending_book_id).execute()
+            print(f"❌ Pending book {pending_book_id} marked as failed")

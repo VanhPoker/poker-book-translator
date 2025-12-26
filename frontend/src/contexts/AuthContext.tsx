@@ -42,46 +42,74 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true)
 
     // Fetch user profile from user_profiles table
-    const fetchProfile = async (userId: string) => {
-        const { data, error } = await supabase
-            .from('user_profiles')
-            .select('*')
-            .eq('id', userId)
-            .single()
+    const fetchProfile = async (userId: string): Promise<UserProfile | null> => {
+        try {
+            const { data, error } = await supabase
+                .from('user_profiles')
+                .select('*')
+                .eq('id', userId)
+                .single()
 
-        if (!error && data) {
-            setProfile(data)
-        } else {
+            if (!error && data) {
+                setProfile(data)
+                return data
+            } else {
+                console.warn('Profile not found or error:', error?.message)
+                setProfile(null)
+                return null
+            }
+        } catch (e) {
+            console.error('Error fetching profile:', e)
             setProfile(null)
+            return null
         }
     }
 
     useEffect(() => {
+        let mounted = true
+
         // Get initial session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session)
-            setUser(session?.user ?? null)
-            if (session?.user) {
-                fetchProfile(session.user.id)
+        const initAuth = async () => {
+            try {
+                const { data: { session } } = await supabase.auth.getSession()
+
+                if (!mounted) return
+
+                setSession(session)
+                setUser(session?.user ?? null)
+
+                if (session?.user) {
+                    await fetchProfile(session.user.id)
+                }
+            } catch (e) {
+                console.error('Auth init error:', e)
+            } finally {
+                if (mounted) setLoading(false)
             }
-            setLoading(false)
-        })
+        }
+
+        initAuth()
 
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (_event, session) => {
+                if (!mounted) return
+
                 setSession(session)
                 setUser(session?.user ?? null)
+
                 if (session?.user) {
                     await fetchProfile(session.user.id)
                 } else {
                     setProfile(null)
                 }
-                setLoading(false)
             }
         )
 
-        return () => subscription.unsubscribe()
+        return () => {
+            mounted = false
+            subscription.unsubscribe()
+        }
     }, [])
 
     // Sign in with email or username

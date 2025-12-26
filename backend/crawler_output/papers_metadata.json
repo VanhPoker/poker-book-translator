@@ -1,0 +1,389 @@
+{
+  "2110.01831v1": {
+    "id": "2110.01831v1",
+    "title": "The Artificial Scientist: Logicist, Emergentist, and Universalist Approaches to Artificial General Intelligence",
+    "summary": "We attempt to define what is necessary to construct an Artificial Scientist, explore and evaluate several approaches to artificial general intelligence (AGI) which may facilitate this, conclude that a unified or hybrid approach is necessary and explore two theories that satisfy this requirement to some degree.",
+    "authors": [
+      "Michael Timothy Bennett",
+      "Yoshihiro Maruyama"
+    ],
+    "published": "2021-10-05T05:58:23Z",
+    "updated": "2021-10-05T05:58:23Z",
+    "pdf_url": "https://arxiv.org/pdf/2110.01831v1",
+    "category": "ai_research",
+    "source": "arxiv",
+    "local_pdf": "crawler_output\\papers\\2110.01831v1.pdf"
+  },
+  "2110.01835v1": {
+    "id": "2110.01835v1",
+    "title": "Compression, The Fermi Paradox and Artificial Super-Intelligence",
+    "summary": "The following briefly discusses possible difficulties in communication with and control of an AGI (artificial general intelligence), building upon an explanation of The Fermi Paradox and preceding work on symbol emergence and artificial general intelligence. The latter suggests that to infer what someone means, an agent constructs a rationale for the observed behaviour of others. Communication then requires two agents labour under similar compulsions and have similar experiences (construct similar solutions to similar tasks). Any non-human intelligence may construct solutions such that any rationale for their behaviour (and thus the meaning of their signals) is outside the scope of what a human is inclined to notice or comprehend. Further, the more compressed a signal, the closer it will appear to random noise. Another intelligence may possess the ability to compress information to the extent that, to us, their signals would appear indistinguishable from noise (an explanation for The Fermi Paradox). To facilitate predictive accuracy an AGI would tend to more compressed representations of the world, making any rationale for their behaviour more difficult to comprehend for the same reason. Communication with and control of an AGI may subsequently necessitate not only human-like compulsions and experiences, but imposed cognitive impairment.",
+    "authors": [
+      "Michael Timothy Bennett"
+    ],
+    "published": "2021-10-05T06:17:02Z",
+    "updated": "2021-10-05T06:17:02Z",
+    "pdf_url": "https://arxiv.org/pdf/2110.01835v1",
+    "category": "ai_research",
+    "source": "arxiv",
+    "local_pdf": "crawler_output\\papers\\2110.01835v1.pdf"
+  },
+  "2204.10358v1": {
+    "id": "2204.10358v1",
+    "title": "Creative Problem Solving in Artificially Intelligent Agents: A Survey and Framework",
+    "summary": "Creative Problem Solving (CPS) is a sub-area within Artificial Intelligence (AI) that focuses on methods for solving off-nominal, or anomalous problems in autonomous systems. Despite many advancements in planning and learning, resolving novel problems or adapting existing knowledge to a new context, especially in cases where the environment may change in unpredictable ways post deployment, remains a limiting factor in the safe and useful integration of intelligent systems. The emergence of increasingly autonomous systems dictates the necessity for AI agents to deal with environmental uncertainty through creativity. To stimulate further research in CPS, we present a definition and a framework of CPS, which we adopt to categorize existing AI methods in this field. Our framework consists of four main components of a CPS problem, namely, 1) problem formulation, 2) knowledge representation, 3) method of knowledge manipulation, and 4) method of evaluation. We conclude our survey with open research questions, and suggested directions for the future.",
+    "authors": [
+      "Evana Gizzi",
+      "Lakshmi Nair",
+      "Sonia Chernova",
+      "Jivko Sinapov"
+    ],
+    "published": "2022-04-21T18:31:44Z",
+    "updated": "2022-04-21T18:31:44Z",
+    "pdf_url": "https://arxiv.org/pdf/2204.10358v1",
+    "category": "ai_research",
+    "source": "arxiv",
+    "local_pdf": "crawler_output\\papers\\2204.10358v1.pdf"
+  },
+  "2203.14669v1": {
+    "id": "2203.14669v1",
+    "title": "Dynamic Structure in Four-strategy Game: Theory and Experiment",
+    "summary": "Game dynamics theory, as a field of science, the consistency of theory and experiment is essential. In the past 10 years, important progress has been made in the merging of the theory and experiment in this field, in which dynamics cycle is the presentation. However, the merging works have not got rid of the constraints of Euclidean two-dimensional cycle so far. This paper uses a classic four-strategy game to study the dynamic structure (non-Euclidean superplane cycle). The consistency is in significant between the three ways: (1) the analytical results from evolutionary dynamics equations, (2) agent-based simulation results from learning models and (3) laboratory results from human subjects game experiments. The consistency suggests that, game dynamic structure could be quantitatively predictable, observable and controllable in general.",
+    "authors": [
+      "Zhijian Wang",
+      "Shujie Zhou",
+      "Qinmei Yao",
+      "Yijia Wang"
+    ],
+    "published": "2022-03-28T12:02:13Z",
+    "updated": "2022-03-28T12:02:13Z",
+    "pdf_url": "https://arxiv.org/pdf/2203.14669v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2207.14140v1": {
+    "id": "2207.14140v1",
+    "title": "Playing a 2D Game Indefinitely using NEAT and Reinforcement Learning",
+    "summary": "For over a decade now, robotics and the use of artificial agents have become a common thing.Testing the performance of new path finding or search space optimization algorithms has also become a challenge as they require simulation or an environment to test them.The creation of artificial environments with artificial agents is one of the methods employed to test such algorithms.Games have also become an environment to test them.The performance of the algorithms can be compared by using artificial agents that will behave according to the algorithm in the environment they are put in.The performance parameters can be, how quickly the agent is able to differentiate between rewarding actions and hostile actions.This can be tested by placing the agent in an environment with different types of hurdles and the goal of the agent is to reach the farthest by taking decisions on actions that will lead to avoiding all the obstacles.The environment chosen is a game called \"Flappy Bird\".The goal of the game is to make the bird fly through a set of pipes of random heights.The bird must go in between these pipes and must not hit the top, the bottom, or the pipes themselves.The actions that the bird can take are either to flap its wings or drop down with gravity.The algorithms that are enforced on the artificial agents are NeuroEvolution of Augmenting Topologies (NEAT) and Reinforcement Learning.The NEAT algorithm takes an \"N\" initial population of artificial agents.They follow genetic algorithms by considering an objective function, crossover, mutation, and augmenting topologies.Reinforcement learning, on the other hand, remembers the state, the action taken at that state, and the reward received for the action taken using a single agent and a Deep Q-learning Network.The performance of the NEAT algorithm improves as the initial population of the artificial agents is increased.",
+    "authors": [
+      "Jerin Paul Selvan",
+      "Pravin S. Game"
+    ],
+    "published": "2022-07-28T15:01:26Z",
+    "updated": "2022-07-28T15:01:26Z",
+    "pdf_url": "https://arxiv.org/pdf/2207.14140v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "1104.3098v3": {
+    "id": "1104.3098v3",
+    "title": "Optimal strategies for a game on amenable semigroups",
+    "summary": "The semigroup game is a two-person zero-sum game defined on a semigroup S as follows: Players 1 and 2 choose elements x and y in S, respectively, and player 1 receives a payoff f(xy) defined by a function f from S to [-1,1]. If the semigroup is amenable in the sense of Day and von Neumann, one can extend the set of classical strategies, namely countably additive probability measures on S, to include some finitely additive measures in a natural way. This extended game has a value and the players have optimal strategies. This theorem extends previous results for the multiplication game on a compact group or on the positive integers with a specific payoff. We also prove that the procedure of extending the set of allowed strategies preserves classical solutions: if a semigroup game has a classical solution, this solution solves also the extended game.",
+    "authors": [
+      "Valerio Capraro",
+      "Kent Morrison"
+    ],
+    "published": "2011-04-15T16:03:59Z",
+    "updated": "2012-07-18T09:24:52Z",
+    "pdf_url": "https://arxiv.org/pdf/1104.3098v3",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "1612.07547v2": {
+    "id": "1612.07547v2",
+    "title": "Equilibrium Approximation Quality of Current No-Limit Poker Bots",
+    "summary": "Approximating a Nash equilibrium is currently the best performing approach for creating poker-playing programs. While for the simplest variants of the game, it is possible to evaluate the quality of the approximation by computing the value of the best response strategy, this is currently not computationally feasible for larger variants of the game, such as heads-up no-limit Texas hold'em. In this paper, we present a simple and computationally inexpensive Local Best Response method for computing an approximate lower bound on the value of the best response strategy. Using this method, we show that existing poker-playing programs, based on solving abstract games, are remarkably poor Nash equilibrium approximations.",
+    "authors": [
+      "Viliam Lisy",
+      "Michael Bowling"
+    ],
+    "published": "2016-12-22T11:24:09Z",
+    "updated": "2017-01-08T14:59:04Z",
+    "pdf_url": "https://arxiv.org/pdf/1612.07547v2",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "1405.3322v5": {
+    "id": "1405.3322v5",
+    "title": "Inapproximability of Nash Equilibrium",
+    "summary": "We prove that finding an $ε$-approximate Nash equilibrium is PPAD-complete for constant $ε$ and a particularly simple class of games: polymatrix, degree 3 graphical games, in which each player has only two actions.\n  As corollaries, we also prove similar inapproximability results for Bayesian Nash equilibrium in a two-player incomplete information game with a constant number of actions, for relative $ε$-Well Supported Nash Equilibrium in a two-player game, for market equilibrium in a non-monotone market, for the generalized circuit problem defined by Chen, Deng, and Teng [CDT'09], and for approximate competitive equilibrium from equal incomes with indivisible goods.",
+    "authors": [
+      "Aviad Rubinstein"
+    ],
+    "published": "2014-05-13T22:41:04Z",
+    "updated": "2016-09-13T17:52:53Z",
+    "pdf_url": "https://arxiv.org/pdf/1405.3322v5",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2202.12292v2": {
+    "id": "2202.12292v2",
+    "title": "Bridging Level-K to Nash Equilibrium",
+    "summary": "We introduce NLK, a model that connects the Nash equilibrium (NE) and Level-K. It allows a player in a game to believe that her opponent may be either less or as sophisticated as, she is, a view supported in psychology. We apply NLK to data from five published papers on static, dynamic, and auction games. NLK provides different predictions than those of the NE and Level-K; moreover, a simple version of NLK explains the experimental data better in many cases, with the same or lower number of parameters. We discuss extensions to games with more than two players and heterogeneous beliefs.",
+    "authors": [
+      "Dan Levin",
+      "Luyao Zhang"
+    ],
+    "published": "2022-02-24T18:49:19Z",
+    "updated": "2022-02-25T07:49:46Z",
+    "pdf_url": "https://arxiv.org/pdf/2202.12292v2",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2501.02842v1": {
+    "id": "2501.02842v1",
+    "title": "Foundations of GenIR",
+    "summary": "The chapter discusses the foundational impact of modern generative AI models on information access (IA) systems. In contrast to traditional AI, the large-scale training and superior data modeling of generative AI models enable them to produce high-quality, human-like responses, which brings brand new opportunities for the development of IA paradigms. In this chapter, we identify and introduce two of them in details, i.e., information generation and information synthesis. Information generation allows AI to create tailored content addressing user needs directly, enhancing user experience with immediate, relevant outputs. Information synthesis leverages the ability of generative AI to integrate and reorganize existing information, providing grounded responses and mitigating issues like model hallucination, which is particularly valuable in scenarios requiring precision and external knowledge. This chapter delves into the foundational aspects of generative models, including architecture, scaling, and training, and discusses their applications in multi-modal scenarios. Additionally, it examines the retrieval-augmented generation paradigm and other methods for corpus modeling and understanding, demonstrating how generative AI can enhance information access systems. It also summarizes potential challenges and fruitful directions for future studies.",
+    "authors": [
+      "Qingyao Ai",
+      "Jingtao Zhan",
+      "Yiqun Liu"
+    ],
+    "published": "2025-01-06T08:38:29Z",
+    "updated": "2025-01-06T08:38:29Z",
+    "pdf_url": "https://arxiv.org/pdf/2501.02842v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2509.00961v1": {
+    "id": "2509.00961v1",
+    "title": "Ultra Strong Machine Learning: Teaching Humans Active Learning Strategies via Automated AI Explanations",
+    "summary": "Ultra Strong Machine Learning (USML) refers to symbolic learning systems that not only improve their own performance but can also teach their acquired knowledge to quantifiably improve human performance. In this work, we present LENS (Logic Programming Explanation via Neural Summarisation), a neuro-symbolic method that combines symbolic program synthesis with large language models (LLMs) to automate the explanation of machine-learned logic programs in natural language. LENS addresses a key limitation of prior USML approaches by replacing hand-crafted explanation templates with scalable automated generation. Through systematic evaluation using multiple LLM judges and human validation, we demonstrate that LENS generates superior explanations compared to direct LLM prompting and hand-crafted templates. To investigate whether LENS can teach transferable active learning strategies, we carried out a human learning experiment across three related domains. Our results show no significant human performance improvements, suggesting that comprehensive LLM responses may overwhelm users for simpler problems rather than providing learning support. Our work provides a solid foundation for building effective USML systems to support human learning. The source code is available on: https://github.com/lun-ai/LENS.git.",
+    "authors": [
+      "Lun Ai",
+      "Johannes Langer",
+      "Ute Schmid",
+      "Stephen Muggleton"
+    ],
+    "published": "2025-08-31T19:04:31Z",
+    "updated": "2025-08-31T19:04:31Z",
+    "pdf_url": "https://arxiv.org/pdf/2509.00961v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2308.12400v1": {
+    "id": "2308.12400v1",
+    "title": "Towards The Ultimate Brain: Exploring Scientific Discovery with ChatGPT AI",
+    "summary": "This paper presents a novel approach to scientific discovery using an artificial intelligence (AI) environment known as ChatGPT, developed by OpenAI. This is the first paper entirely generated with outputs from ChatGPT. We demonstrate how ChatGPT can be instructed through a gamification environment to define and benchmark hypothetical physical theories. Through this environment, ChatGPT successfully simulates the creation of a new improved model, called GPT$^4$, which combines the concepts of GPT in AI (generative pretrained transformer) and GPT in physics (generalized probabilistic theory). We show that GPT$^4$ can use its built-in mathematical and statistical capabilities to simulate and analyze physical laws and phenomena. As a demonstration of its language capabilities, GPT$^4$ also generates a limerick about itself. Overall, our results demonstrate the promising potential for human-AI collaboration in scientific discovery, as well as the importance of designing systems that effectively integrate AI's capabilities with human intelligence.",
+    "authors": [
+      "Gerardo Adesso"
+    ],
+    "published": "2023-07-08T09:59:22Z",
+    "updated": "2023-07-08T09:59:22Z",
+    "pdf_url": "https://arxiv.org/pdf/2308.12400v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "1302.7008v2": {
+    "id": "1302.7008v2",
+    "title": "Measuring the Size of Large No-Limit Poker Games",
+    "summary": "In the field of computational game theory, games are often compared in terms of their size. This can be measured in several ways, including the number of unique game states, the number of decision points, and the total number of legal actions over all decision points. These numbers are either known or estimated for a wide range of classic games such as chess and checkers. In the stochastic and imperfect information game of poker, these sizes are easily computed in \"limit\" games which restrict the players' available actions, but until now had only been estimated for the more complicated \"no-limit\" variants. In this paper, we describe a simple algorithm for quickly computing the size of two-player no-limit poker games, provide an implementation of this algorithm, and present for the first time precise counts of the number of game states, information sets, actions and terminal nodes in the no-limit poker games played in the Annual Computer Poker Competition.",
+    "authors": [
+      "Michael Johanson"
+    ],
+    "published": "2013-02-27T21:20:49Z",
+    "updated": "2013-03-07T18:25:04Z",
+    "pdf_url": "https://arxiv.org/pdf/1302.7008v2",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "1701.01724v3": {
+    "id": "1701.01724v3",
+    "title": "DeepStack: Expert-Level Artificial Intelligence in No-Limit Poker",
+    "summary": "Artificial intelligence has seen several breakthroughs in recent years, with games often serving as milestones. A common feature of these games is that players have perfect information. Poker is the quintessential game of imperfect information, and a longstanding challenge problem in artificial intelligence. We introduce DeepStack, an algorithm for imperfect information settings. It combines recursive reasoning to handle information asymmetry, decomposition to focus computation on the relevant decision, and a form of intuition that is automatically learned from self-play using deep learning. In a study involving 44,000 hands of poker, DeepStack defeated with statistical significance professional poker players in heads-up no-limit Texas hold'em. The approach is theoretically sound and is shown to produce more difficult to exploit strategies than prior approaches.",
+    "authors": [
+      "Matej Moravčík",
+      "Martin Schmid",
+      "Neil Burch",
+      "Viliam Lisý",
+      "Dustin Morrill",
+      "Nolan Bard",
+      "Trevor Davis",
+      "Kevin Waugh",
+      "Michael Johanson",
+      "Michael Bowling"
+    ],
+    "published": "2017-01-06T18:56:49Z",
+    "updated": "2017-03-03T21:17:05Z",
+    "pdf_url": "https://arxiv.org/pdf/1701.01724v3",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2307.12087v1": {
+    "id": "2307.12087v1",
+    "title": "CFR-p: Counterfactual Regret Minimization with Hierarchical Policy Abstraction, and its Application to Two-player Mahjong",
+    "summary": "Counterfactual Regret Minimization(CFR) has shown its success in Texas Hold'em poker. We apply this algorithm to another popular incomplete information game, Mahjong. Compared to the poker game, Mahjong is much more complex with many variants. We study two-player Mahjong by conducting game theoretical analysis and making a hierarchical abstraction to CFR based on winning policies. This framework can be generalized to other imperfect information games.",
+    "authors": [
+      "Shiheng Wang"
+    ],
+    "published": "2023-07-22T14:38:47Z",
+    "updated": "2023-07-22T14:38:47Z",
+    "pdf_url": "https://arxiv.org/pdf/2307.12087v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2509.04125v1": {
+    "id": "2509.04125v1",
+    "title": "Analysis of Bluffing by DQN and CFR in Leduc Hold'em Poker",
+    "summary": "In the game of poker, being unpredictable, or bluffing, is an essential skill. When humans play poker, they bluff. However, most works on computer-poker focus on performance metrics such as win rates, while bluffing is overlooked. In this paper we study whether two popular algorithms, DQN (based on reinforcement learning) and CFR (based on game theory), exhibit bluffing behavior in Leduc Hold'em, a simplified version of poker. We designed an experiment where we let the DQN and CFR agent play against each other while we log their actions. We find that both DQN and CFR exhibit bluffing behavior, but they do so in different ways. Although both attempt to perform bluffs at different rates, the percentage of successful bluffs (where the opponent folds) is roughly the same. This suggests that bluffing is an essential aspect of the game, not of the algorithm. Future work should look at different bluffing styles and at the full game of poker. Code at https://github.com/TarikZ03/Bluffing-by-DQN-and-CFR-in-Leduc-Hold-em-Poker-Codebase.",
+    "authors": [
+      "Tarik Zaciragic",
+      "Aske Plaat",
+      "K. Joost Batenburg"
+    ],
+    "published": "2025-09-04T11:40:24Z",
+    "updated": "2025-09-04T11:40:24Z",
+    "pdf_url": "https://arxiv.org/pdf/2509.04125v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "1811.00164v3": {
+    "id": "1811.00164v3",
+    "title": "Deep Counterfactual Regret Minimization",
+    "summary": "Counterfactual Regret Minimization (CFR) is the leading framework for solving large imperfect-information games. It converges to an equilibrium by iteratively traversing the game tree. In order to deal with extremely large games, abstraction is typically applied before running CFR. The abstracted game is solved with tabular CFR, and its solution is mapped back to the full game. This process can be problematic because aspects of abstraction are often manual and domain specific, abstraction algorithms may miss important strategic nuances of the game, and there is a chicken-and-egg problem because determining a good abstraction requires knowledge of the equilibrium of the game. This paper introduces Deep Counterfactual Regret Minimization, a form of CFR that obviates the need for abstraction by instead using deep neural networks to approximate the behavior of CFR in the full game. We show that Deep CFR is principled and achieves strong performance in large poker games. This is the first non-tabular variant of CFR to be successful in large games.",
+    "authors": [
+      "Noam Brown",
+      "Adam Lerer",
+      "Sam Gross",
+      "Tuomas Sandholm"
+    ],
+    "published": "2018-11-01T00:07:02Z",
+    "updated": "2019-05-22T17:53:39Z",
+    "pdf_url": "https://arxiv.org/pdf/1811.00164v3",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "1509.06731v1": {
+    "id": "1509.06731v1",
+    "title": "Poker-CNN: A Pattern Learning Strategy for Making Draws and Bets in Poker Games",
+    "summary": "Poker is a family of card games that includes many variations. We hypothesize that most poker games can be solved as a pattern matching problem, and propose creating a strong poker playing system based on a unified poker representation. Our poker player learns through iterative self-play, and improves its understanding of the game by training on the results of its previous actions without sophisticated domain knowledge. We evaluate our system on three poker games: single player video poker, two-player Limit Texas Hold'em, and finally two-player 2-7 triple draw poker. We show that our model can quickly learn patterns in these very different poker games while it improves from zero knowledge to a competitive player against human experts.\n  The contributions of this paper include: (1) a novel representation for poker games, extendable to different poker variations, (2) a CNN based learning model that can effectively learn the patterns in three different games, and (3) a self-trained system that significantly beats the heuristic-based program on which it is trained, and our system is competitive against human expert players.",
+    "authors": [
+      "Nikolai Yakovenko",
+      "Liangliang Cao",
+      "Colin Raffel",
+      "James Fan"
+    ],
+    "published": "2015-09-22T19:05:39Z",
+    "updated": "2015-09-22T19:05:39Z",
+    "pdf_url": "https://arxiv.org/pdf/1509.06731v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2011.04450v1": {
+    "id": "2011.04450v1",
+    "title": "Kuhn Poker with Cheating and Its Detection",
+    "summary": "Poker is a multiplayer game of imperfect information and has been widely studied in game theory. Many popular variants of poker (e.g., Texas Hold'em and Omaha) at the edge of modern game theory research are large games. However, even toy poker games, such as Kuhn poker, can pose new challenges. Many Kuhn poker variants have been investigated: varying the number of players, initial pot size, and number of betting rounds. In this paper we analyze a new variant -- Kuhn poker with cheating and cheating detection. We determine how cheating changes the players' strategies and derive new analytical results.",
+    "authors": [
+      "Amanda Metzner",
+      "Daniel Zwillinger"
+    ],
+    "published": "2020-11-09T14:19:30Z",
+    "updated": "2020-11-09T14:19:30Z",
+    "pdf_url": "https://arxiv.org/pdf/2011.04450v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2208.05369v1": {
+    "id": "2208.05369v1",
+    "title": "E Pluribus Unum Interpretable Convolutional Neural Networks",
+    "summary": "The adoption of Convolutional Neural Network (CNN) models in high-stake domains is hindered by their inability to meet society's demand for transparency in decision-making. So far, a growing number of methodologies have emerged for developing CNN models that are interpretable by design. However, such models are not capable of providing interpretations in accordance with human perception, while maintaining competent performance. In this paper, we tackle these challenges with a novel, general framework for instantiating inherently interpretable CNN models, named E Pluribus Unum Interpretable CNN (EPU-CNN). An EPU-CNN model consists of CNN sub-networks, each of which receives a different representation of an input image expressing a perceptual feature, such as color or texture. The output of an EPU-CNN model consists of the classification prediction and its interpretation, in terms of relative contributions of perceptual features in different regions of the input image. EPU-CNN models have been extensively evaluated on various publicly available datasets, as well as a contributed benchmark dataset. Medical datasets are used to demonstrate the applicability of EPU-CNN for risk-sensitive decisions in medicine. The experimental results indicate that EPU-CNN models can achieve a comparable or better classification performance than other CNN architectures while providing humanly perceivable interpretations.",
+    "authors": [
+      "George Dimas",
+      "Eirini Cholopoulou",
+      "Dimitris K. Iakovidis"
+    ],
+    "published": "2022-08-10T14:37:03Z",
+    "updated": "2022-08-10T14:37:03Z",
+    "pdf_url": "https://arxiv.org/pdf/2208.05369v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2401.06168v1": {
+    "id": "2401.06168v1",
+    "title": "A Survey on Game Theory Optimal Poker",
+    "summary": "Poker is in the family of imperfect information games unlike other games such as chess, connect four, etc which are perfect information game instead. While many perfect information games have been solved, no non-trivial imperfect information game has been solved to date. This makes poker a great test bed for Artificial Intelligence research. In this paper we firstly compare Game theory optimal poker to Exploitative poker. Secondly, we discuss the intricacies of abstraction techniques, betting models, and specific strategies employed by successful poker bots like Tartanian[1] and Pluribus[6]. Thirdly, we also explore 2-player vs multi-player games and the limitations that come when playing with more players. Finally, this paper discusses the role of machine learning and theoretical approaches in developing winning strategies and suggests future directions for this rapidly evolving field.",
+    "authors": [
+      "Prathamesh Sonawane",
+      "Arav Chheda"
+    ],
+    "published": "2024-01-02T04:19:25Z",
+    "updated": "2024-01-02T04:19:25Z",
+    "pdf_url": "https://arxiv.org/pdf/2401.06168v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2406.04334v1": {
+    "id": "2406.04334v1",
+    "title": "DeepStack: Deeply Stacking Visual Tokens is Surprisingly Simple and Effective for LMMs",
+    "summary": "Most large multimodal models (LMMs) are implemented by feeding visual tokens as a sequence into the first layer of a large language model (LLM). The resulting architecture is simple but significantly increases computation and memory costs, as it has to handle a large number of additional tokens in its input layer. This paper presents a new architecture DeepStack for LMMs. Considering $N$ layers in the language and vision transformer of LMMs, we stack the visual tokens into $N$ groups and feed each group to its aligned transformer layer \\textit{from bottom to top}. Surprisingly, this simple method greatly enhances the power of LMMs to model interactions among visual tokens across layers but with minimal additional cost. We apply DeepStack to both language and vision transformer in LMMs, and validate the effectiveness of DeepStack LMMs with extensive empirical results. Using the same context length, our DeepStack 7B and 13B parameters surpass their counterparts by \\textbf{2.7} and \\textbf{2.9} on average across \\textbf{9} benchmarks, respectively. Using only one-fifth of the context length, DeepStack rivals closely to the counterparts that use the full context length. These gains are particularly pronounced on high-resolution tasks, e.g., \\textbf{4.2}, \\textbf{11.0}, and \\textbf{4.0} improvements on TextVQA, DocVQA, and InfoVQA compared to LLaVA-1.5-7B, respectively. We further apply DeepStack to vision transformer layers, which brings us a similar amount of improvements, \\textbf{3.8} on average compared with LLaVA-1.5-7B.",
+    "authors": [
+      "Lingchen Meng",
+      "Jianwei Yang",
+      "Rui Tian",
+      "Xiyang Dai",
+      "Zuxuan Wu",
+      "Jianfeng Gao",
+      "Yu-Gang Jiang"
+    ],
+    "published": "2024-06-06T17:59:34Z",
+    "updated": "2024-06-06T17:59:34Z",
+    "pdf_url": "https://arxiv.org/pdf/2406.04334v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "1612.06915v2": {
+    "id": "1612.06915v2",
+    "title": "AIVAT: A New Variance Reduction Technique for Agent Evaluation in Imperfect Information Games",
+    "summary": "Evaluating agent performance when outcomes are stochastic and agents use randomized strategies can be challenging when there is limited data available. The variance of sampled outcomes may make the simple approach of Monte Carlo sampling inadequate. This is the case for agents playing heads-up no-limit Texas hold'em poker, where man-machine competitions have involved multiple days of consistent play and still not resulted in statistically significant conclusions even when the winner's margin is substantial. In this paper, we introduce AIVAT, a low variance, provably unbiased value assessment tool that uses an arbitrary heuristic estimate of state value, as well as the explicit strategy of a subset of the agents. Unlike existing techniques which reduce the variance from chance events, or only consider game ending actions, AIVAT reduces the variance both from choices by nature and by players with a known strategy. The resulting estimator in no-limit poker can reduce the number of hands needed to draw statistical conclusions by more than a factor of 10.",
+    "authors": [
+      "Neil Burch",
+      "Martin Schmid",
+      "Matej Moravčík",
+      "Michael Bowling"
+    ],
+    "published": "2016-12-20T23:09:40Z",
+    "updated": "2017-01-19T21:22:12Z",
+    "pdf_url": "https://arxiv.org/pdf/1612.06915v2",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2308.07327v6": {
+    "id": "2308.07327v6",
+    "title": "PokerKit: A Comprehensive Python Library for Fine-Grained Multi-Variant Poker Game Simulations",
+    "summary": "PokerKit is an open-source Python library designed to overcome the restrictions of existing poker game simulation and hand evaluation tools, which typically support only a handful of poker variants and lack flexibility in game state control. In contrast, PokerKit significantly expands this scope by supporting an extensive array of poker variants and it provides a flexible architecture for users to define their custom games. This paper details the design and implementation of PokerKit, including its intuitive programmatic API, multi-variant game support, and a unified hand evaluation suite across different hand types. The flexibility of PokerKit allows for applications in diverse areas, such as poker AI development, tool creation, and online poker casino implementation. PokerKit's reliability has been established through static type checking, extensive doctests, and unit tests, achieving 99% code coverage. The introduction of PokerKit represents a significant contribution to the field of computer poker, fostering future research and advanced AI development for a wide variety of poker games. The source code is available at https://github.com/uoftcprg/pokerkit",
+    "authors": [
+      "Juho Kim"
+    ],
+    "published": "2023-08-08T13:54:48Z",
+    "updated": "2024-09-03T05:01:04Z",
+    "pdf_url": "https://arxiv.org/pdf/2308.07327v6",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "2412.06830v1": {
+    "id": "2412.06830v1",
+    "title": "A New Strategy for the Exploration of Venus",
+    "summary": "The 2023-2032 Planetary Science and Astrobiology Decadal Survey Origins, Worlds, and Life recommended that \"NASA develop scientific exploration strategies, as it has for Mars, in areas of broad scientific importance, e.g., Venus... that have an increasing number of U.S. missions and international collaboration opportunities\" (OWL, p.22-10). In NASA's initial responses to that Decadal Survey, the agency asserted that \"...specific scientific exploration strategies should be community generated by bodies such as the Analysis Groups,\" thus placing the onus on the planetary community to generate and support these exploration strategies. In late 2022, the Venus Exploration Analysis Group began a project to develop a new exploration strategy for Venus, reflecting the 2021 selections of the VERITAS, DAVINCI, and EnVision missions and the sweeping comparative planetology recommendations relevant to Venus in Origins, Worlds, and Life.\n  This is that strategy.\n  Taking a broad look at the scientific, technological, and programmatic advances required to address the key outstanding questions that Venus poses, and predicated on VERITAS, DAVINCI, and EnVision flying as planned in the early 2030s, this report outlines a set of actions available to NASA, VEXAG, and the planetary science community at large to establish a sustained program of Venus exploration in the years and decades ahead. Key to this approach is recognizing Venus as a unique setting where multiple, cross-disciplinary, Decadal-level planetary, Earth, heliophysics, and exoplanet science questions can be addressed, as well as being a worthy target of exploration in its own right.\n  This report offers Assessments of the current state of Venus exploration, and Actions for the U.S. and international Venus community, as well as NASA, to consider. This strategy is a living document and should be updated as warranted.",
+    "authors": [
+      "The VEXAG Exploration Strategy Study Analysis Workgroup"
+    ],
+    "published": "2024-12-06T22:58:32Z",
+    "updated": "2024-12-06T22:58:32Z",
+    "pdf_url": "https://arxiv.org/pdf/2412.06830v1",
+    "category": "ai_research",
+    "source": "arxiv"
+  },
+  "1910.11775v2": {
+    "id": "1910.11775v2",
+    "title": "Physics Briefing Book",
+    "summary": "The European Particle Physics Strategy Update (EPPSU) process takes a bottom-up approach, whereby the community is first invited to submit proposals (also called inputs) for projects that it would like to see realised in the near-term, mid-term and longer-term future. National inputs as well as inputs from National Laboratories are also an important element of the process. All these inputs are then reviewed by the Physics Preparatory Group (PPG), whose role is to organize a Symposium around the submitted ideas and to prepare a community discussion on the importance and merits of the various proposals. The results of these discussions are then concisely summarised in this Briefing Book, prepared by the Conveners, assisted by Scientific Secretaries, and with further contributions provided by the Contributors listed on the title page. This constitutes the basis for the considerations of the European Strategy Group (ESG), consisting of scientific delegates from CERN Member States, Associate Member States, directors of major European laboratories, representatives of various European organizations as well as invitees from outside the European Community. The ESG has the mission to formulate the European Strategy Update for the consideration and approval of the CERN Council.",
+    "authors": [
+      " European Strategy for Particle Physics Preparatory Group"
+    ],
+    "published": "2019-10-25T14:54:44Z",
+    "updated": "2020-01-10T08:40:16Z",
+    "pdf_url": "https://arxiv.org/pdf/1910.11775v2",
+    "category": "ai_research",
+    "source": "arxiv"
+  }
+}

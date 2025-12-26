@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from api.routes import translate
+from api.routes import translate, queue
 
 # Lifespan event handler
 @asynccontextmanager
@@ -35,6 +35,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(translate.router, prefix="/api/v1", tags=["Translation"])
+app.include_router(queue.router, prefix="/api/v1", tags=["Translation Queue"])
 
 
 @app.get("/")

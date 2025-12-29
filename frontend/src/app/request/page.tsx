@@ -4,8 +4,7 @@ import { useState, useRef } from "react"
 import { useTheme } from "@/contexts/ThemeContext"
 import { useAuth } from "@/contexts/AuthContext"
 import Link from "next/link"
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+import { supabase } from "@/lib/supabase"
 
 const CATEGORIES = [
     { id: 'nlh', name: 'No Limit Hold\'em', icon: '♠️' },
@@ -48,27 +47,40 @@ export default function RequestPage() {
         setError('')
 
         try {
-            const formData = new FormData()
-            formData.append('file', file)
-            formData.append('title', title || file.name.replace('.pdf', ''))
-            formData.append('category', category)
+            // Generate unique file name
+            const fileId = crypto.randomUUID()
+            const fileName = `pending/${fileId}.pdf`
 
-            // Create URL with query params for source
-            const url = new URL(`${API_URL}/api/v1/queue/upload`)
-            url.searchParams.append('source', 'user_request')
-            if (note) {
-                url.searchParams.append('note', note)
-            }
+            // Upload file to Supabase Storage
+            const { error: uploadError } = await supabase.storage
+                .from('books')
+                .upload(fileName, file)
 
-            const response = await fetch(url.toString(), {
-                method: 'POST',
-                body: formData
-            })
+            if (uploadError) throw uploadError
 
-            if (!response.ok) {
-                const data = await response.json()
-                throw new Error(data.detail || 'Upload thất bại')
-            }
+            // Get public URL
+            const { data: urlData } = supabase.storage
+                .from('books')
+                .getPublicUrl(fileName)
+
+            const pdfUrl = urlData.publicUrl
+
+            // Insert record to pending_books
+            const bookTitle = title || file.name.replace('.pdf', '')
+            const { error: insertError } = await supabase
+                .from('pending_books')
+                .insert({
+                    id: fileId,
+                    title: bookTitle,
+                    pdf_url: pdfUrl,
+                    source: 'user_request',
+                    category: category,
+                    priority: 0,  // User requests have lower priority
+                    status: 'pending',
+                    metadata: note ? { note } : {}
+                })
+
+            if (insertError) throw insertError
 
             setSuccess(true)
             setTitle('')

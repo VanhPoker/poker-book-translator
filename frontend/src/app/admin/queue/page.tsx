@@ -5,6 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext"
 import { useAuth } from "@/contexts/AuthContext"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { supabase } from "@/lib/supabase"
 
 interface PendingBook {
     id: string
@@ -19,7 +20,7 @@ interface PendingBook {
     metadata: Record<string, unknown>
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001'
 
 const CATEGORIES = [
     { id: 'nlh', name: 'NLH', icon: '♠️' },
@@ -58,30 +59,33 @@ export default function QueuePage() {
         if (user && isAdmin) {
             loadPendingBooks()
         }
-    }, [user, isAdmin])
+    }, [user, isAdmin, statusFilter, sourceFilter])
 
+    // Load directly from Supabase - simple and no CORS issues
     const loadPendingBooks = async () => {
         try {
-            const params = new URLSearchParams()
-            if (statusFilter) params.append('status', statusFilter)
-            if (sourceFilter) params.append('source', sourceFilter)
-            const queryString = params.toString() ? `?${params.toString()}` : ''
+            let query = supabase
+                .from('pending_books')
+                .select('*')
+                .order('priority', { ascending: false })
+                .order('created_at', { ascending: false })
 
-            // Add timeout using AbortController
-            const controller = new AbortController()
-            const timeoutId = setTimeout(() => controller.abort(), 10000) // 10s timeout
-
-            const response = await fetch(`${API_URL}/api/v1/queue/pending${queryString}`, {
-                signal: controller.signal
-            })
-            clearTimeout(timeoutId)
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch')
+            if (statusFilter) {
+                query = query.eq('status', statusFilter)
+            }
+            if (sourceFilter) {
+                query = query.eq('source', sourceFilter)
             }
 
-            const data = await response.json()
-            setPendingBooks(data.books || [])
+            const { data, error } = await query
+
+            if (error) {
+                console.error('Error loading pending books:', error)
+                setPendingBooks([])
+                return
+            }
+
+            setPendingBooks(data || [])
         } catch (error) {
             console.error('Error loading pending books:', error)
             setPendingBooks([])
@@ -90,12 +94,6 @@ export default function QueuePage() {
         }
     }
 
-    // Reload when filters change
-    useEffect(() => {
-        if (user && isAdmin) {
-            loadPendingBooks()
-        }
-    }, [statusFilter, sourceFilter])
 
     const handleUpload = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -115,20 +113,42 @@ export default function QueuePage() {
         setUploading(true)
 
         try {
-            const formData = new FormData()
-            formData.append('file', file)
-            if (uploadTitle) formData.append('title', uploadTitle)
-            formData.append('category', uploadCategory)
+            // Generate unique file name
+            const fileId = crypto.randomUUID()
+            const fileName = `pending/${fileId}.pdf`
 
-            const response = await fetch(`${API_URL}/api/v1/queue/upload`, {
-                method: 'POST',
-                body: formData
-            })
+            // Upload file to Supabase Storage
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('books')
+                .upload(fileName, file)
 
-            if (!response.ok) throw new Error('Upload failed')
+            if (uploadError) throw uploadError
 
-            const result = await response.json()
-            alert(`✅ Đã thêm "${result.title}" vào hàng đợi!`)
+            // Get public URL
+            const { data: urlData } = supabase.storage
+                .from('books')
+                .getPublicUrl(fileName)
+
+            const pdfUrl = urlData.publicUrl
+
+            // Insert record to pending_books
+            const title = uploadTitle || file.name.replace('.pdf', '')
+            const { error: insertError } = await supabase
+                .from('pending_books')
+                .insert({
+                    id: fileId,
+                    title: title,
+                    pdf_url: pdfUrl,
+                    source: 'upload',
+                    category: uploadCategory,
+                    priority: 1,
+                    status: 'pending',
+                    metadata: {}
+                })
+
+            if (insertError) throw insertError
+
+            alert(`✅ Đã thêm "${title}" vào hàng đợi!`)
 
             // Reset form
             setUploadTitle('')
@@ -173,9 +193,22 @@ export default function QueuePage() {
         if (!confirm(`Xóa "${book.title}" khỏi hàng đợi?`)) return
 
         try {
-            await fetch(`${API_URL}/api/v1/queue/pending/${book.id}`, {
-                method: 'DELETE'
-            })
+            // Delete from Supabase
+            const { error } = await supabase
+                .from('pending_books')
+                .delete()
+                .eq('id', book.id)
+
+            if (error) throw error
+
+            // Also delete PDF from storage if it's in our storage
+            if (book.pdf_url?.includes('pending/')) {
+                const fileName = book.pdf_url.split('/').pop()
+                await supabase.storage
+                    .from('books')
+                    .remove([`pending/${fileName}`])
+            }
+
             loadPendingBooks()
         } catch (error) {
             alert('Lỗi xóa: ' + (error as Error).message)

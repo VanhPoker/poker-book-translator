@@ -26,23 +26,37 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadBooks() {
-      try {
-        // Timeout after 10 seconds
-        const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Request timeout')), 10000)
-        );
+    let isMounted = true;
 
-        const data = await Promise.race([getBooks(), timeoutPromise]);
-        setBooks(data);
+    async function loadBooks(retryCount = 0) {
+      try {
+        const data = await getBooks();
+        if (isMounted) {
+          setBooks(data);
+          setError(null);
+        }
       } catch (err) {
         console.error('Error loading books:', err);
-        setError('Không thể tải sách. Vui lòng thử lại sau.');
+        // Retry up to 2 times with delay
+        if (retryCount < 2) {
+          setTimeout(() => loadBooks(retryCount + 1), 1000 * (retryCount + 1));
+          return;
+        }
+        if (isMounted) {
+          setError('Không thể tải sách. Vui lòng thử lại sau.');
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
+
     loadBooks();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Handle search with useCallback to avoid re-renders

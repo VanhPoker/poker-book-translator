@@ -44,7 +44,8 @@ class DatabaseService:
         source_format: str = "pdf",
         target_language: str = "vi",
         file_size_bytes: int = 0,
-        category: str = "general"
+        category: str = "general",
+        pending_book_id: Optional[str] = None
     ) -> dict:
         """Create a new book record"""
         book = {
@@ -57,6 +58,8 @@ class DatabaseService:
             "category": category,
             "created_at": datetime.now().isoformat()
         }
+        if pending_book_id:
+            book["pending_book_id"] = pending_book_id
         
         if self.supabase:
             try:

@@ -369,13 +369,11 @@ async def run_translation_job(
         build_epub(str(translated_md_path), epub_path, output_dir + "/")
         build_html(str(translated_md_path), html_path, output_dir + "/")
         
-        # Step 3.5: Build Vietnamese PDF (optional - requires LaTeX)
-        try:
-            build_pdf(str(translated_md_path), translated_pdf_path, output_dir + "/")
-            print(f"📄 Vietnamese PDF created: {translated_pdf_path}")
-        except Exception as pdf_err:
-            print(f"⚠️ PDF generation skipped: {pdf_err}")
-            translated_pdf_path = None
+        
+        # PDF build disabled - too slow and often fails due to LaTeX requirements
+        # EPUB and HTML are sufficient for reading
+        translated_pdf_path = None
+        print("📄 PDF generation skipped (disabled for performance)")
         
         # Step 4: Upload cover and images first
         gcs_prefix = f"books/{job_id}/"
